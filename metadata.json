@@ -1,0 +1,9 @@
+{
+  "name": "DR.IA APP",
+  "description": "Plataforma Inteligente de Triagem Clínica para Angola - DR.IA Cidadão, DR.IA Hospital e DR.IA Ministério da Saúde.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

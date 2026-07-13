@@ -15,6 +15,9 @@ import {
 } from '../src/constants/mocks';
 import { INBOX } from '../src/constants/data';
 
+// Provide WebSocket implementation for Node.js < 22
+globalThis.WebSocket = ws as unknown as typeof WebSocket;
+
 const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
 const supabaseKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY ||

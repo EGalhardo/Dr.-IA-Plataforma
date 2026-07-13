@@ -194,7 +194,7 @@ export function Header({
         className="app-mobile-header lg:hidden fixed left-0 right-0 h-16 bg-white/90 backdrop-blur-xl border-b border-ink-100 px-4 flex items-center justify-between z-40"
       >
         <div className="flex items-center gap-2">
-          <button onClick={onOpenMobileSidebar} className="btn-icon -ml-2" aria-label="Abrir menu">
+          <button onClick={onOpenMobileSidebar} className="btn-icon -ml-2" aria-label={translate("Abrir menu")}>
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setTab(isAdmin ? 'minsa-dashboard' : 'home')}>
@@ -216,7 +216,7 @@ export function Header({
           <button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             className="btn-icon"
-            aria-label="Alternar tema"
+            aria-label={translate("Alternar tema")}
           >
             <AnimatePresence mode="wait">
               {theme === 'light' ? (
@@ -235,7 +235,7 @@ export function Header({
             disabled={micDisabled}
             onClick={!micDisabled ? handleMicClick : undefined}
             className={`relative btn-icon ${iaLiveActive ? '!bg-medic-50 !text-medic-600' : ''} ${micDisabled ? 'opacity-30' : ''}`}
-            aria-label="Assistente de voz"
+            aria-label={translate("Assistente de voz")}
           >
             {iaLiveActive && (
               <motion.div
@@ -252,7 +252,7 @@ export function Header({
             <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="btn-icon relative"
-              aria-label="Notificações"
+              aria-label={translate("Notificações")}
             >
               <Bell size={18} />
               {unreadCount > 0 && (
@@ -277,7 +277,7 @@ export function Header({
             <span className="text-medic-600 font-semibold">Dr.IA</span>
             <ChevronDown size={12} className="rotate-[-90deg] text-ink-300" />
             <span>
-              {isAdmin ? 'MINSA' : isInst ? 'Hospital' : 'Cidadão'}
+              {translate(isAdmin ? 'MINSA' : isInst ? 'Hospital' : 'Cidadão')}
             </span>
             <ChevronDown size={12} className="rotate-[-90deg] text-ink-300" />
             <span className="breadcrumb-current">{translate(getSectionLabel())}</span>
@@ -292,7 +292,7 @@ export function Header({
           <Search size={14} className="text-ink-400" />
           <input
             type="text"
-            placeholder={isAdmin ? 'Pesquisar hospitais, indicadores…' : isInst ? 'Pesquisar pacientes, triagens…' : 'Pesquisar consultas, documentos…'}
+            placeholder={translate(isAdmin ? 'Pesquisar hospitais, indicadores...' : isInst ? 'Pesquisar pacientes, triagens...' : 'Pesquisar consultas, documentos...')}
             className="bg-transparent outline-none text-xs text-ink-700 placeholder:text-ink-400 w-full"
           />
           <kbd className="hidden md:inline-flex text-[9px] font-semibold text-ink-400 bg-white border border-ink-200 rounded px-1.5 py-0.5">⌘K</kbd>
@@ -310,7 +310,7 @@ export function Header({
             }`}
           >
             {isOnline ? <Wifi size={14} /> : <WifiOff size={14} />}
-            <span className="uppercase tracking-wider">{isOnline ? 'Online' : 'Offline'}</span>
+            <span className="uppercase tracking-wider">{translate(isOnline ? 'Online' : 'Offline')}</span>
             {offlineQueueLength > 0 && (
               <span className="bg-warning-600 text-white rounded-full min-w-[18px] h-[18px] text-[10px] font-bold flex items-center justify-center px-1">
                 {offlineQueueLength}
@@ -357,7 +357,7 @@ export function Header({
             <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="btn-icon relative"
-              aria-label="Notificações"
+              aria-label={translate("Notificações")}
             >
               <Bell size={18} />
               {unreadCount > 0 && (
@@ -389,7 +389,7 @@ export function Header({
             <div className="hidden md:flex flex-col items-start leading-tight">
               <span className="text-xs font-semibold text-ink-900 max-w-[140px] truncate">{user.name || 'Dr.IA'}</span>
               <span className="text-[10px] text-ink-500 uppercase tracking-wider">
-                {isAdmin ? 'MINSA' : isInst ? 'Hospital' : 'Cidadão'}
+                {translate(isAdmin ? 'MINSA' : isInst ? 'Hospital' : 'Cidadão')}
               </span>
             </div>
           </button>

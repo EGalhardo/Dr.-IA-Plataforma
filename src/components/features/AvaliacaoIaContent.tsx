@@ -282,80 +282,79 @@ export function AvaliacaoIaContent({
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm flex flex-col font-sans h-[calc(100vh-190px)] lg:h-[calc(100vh-150px)] min-h-[500px] lg:min-h-[620px]">
-      
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col h-[calc(100vh-170px)] lg:h-[calc(100vh-130px)] min-h-[460px] lg:min-h-[560px]">
       {/* Header Banner - Conditionally shown depending on phase */}
       {phase !== 'chat' ? (
-        <div className="bg-gradient-to-r from-[#0E2B64] to-indigo-900 p-5 text-white flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
-              <Activity className="text-emerald-400" size={20} />
+        <div className="bg-gradient-to-r from-[#0E2B64] to-indigo-900 p-4 text-white flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center border border-white/20">
+              <Activity className="text-emerald-400" size={18} />
             </div>
             <div>
-              <h2 className="text-base font-black uppercase tracking-tight leading-none flex items-center gap-1.5">
-                Avaliação IA Clínica <Sparkles size={14} className="text-emerald-400 animate-pulse" />
+              <h2 className="text-sm font-black uppercase tracking-tight leading-none flex items-center gap-1">
+                Avaliação IA Clínica <Sparkles size={12} className="text-emerald-400 animate-pulse" />
               </h2>
-              <p className="text-[10px] text-indigo-200 font-extrabold uppercase tracking-widest mt-1">Triagem Autónoma Inteligente</p>
+              <p className="text-[9px] text-indigo-200 font-extrabold uppercase tracking-widest mt-0.5">Triagem Autónoma Inteligente</p>
             </div>
           </div>
-          <div className="px-3 py-1.5 bg-indigo-850 border border-indigo-700 rounded-full text-[9px] font-bold text-indigo-100 flex items-center gap-1.5">
-            <ShieldCheck size={12} className="text-emerald-400" /> Protocolo Manchester
+          <div className="px-2.5 py-1 bg-indigo-850 border border-indigo-700 rounded-full text-[8px] font-bold text-indigo-100 flex items-center gap-1">
+            <ShieldCheck size={10} className="text-emerald-400" /> Protocolo Manchester
           </div>
         </div>
       ) : (
-        <div className="flex items-center gap-2.5 px-6 pt-5 pb-3 border-b border-slate-100 shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-[#A855F7]/15 flex items-center justify-center text-[#A855F7] shrink-0">
-            <Bot size={20} className="stroke-[2.5]" />
+        <div className="flex items-center gap-2 px-4 pt-3 pb-2 border-b border-slate-100 shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-[#A855F7]/15 flex items-center justify-center text-[#A855F7] shrink-0">
+            <Bot size={18} className="stroke-[2.5]" />
           </div>
-          <h2 className="text-base md:text-lg font-black text-slate-800 tracking-tight">
+          <h2 className="text-sm md:text-base font-black text-slate-800 tracking-tight">
             Assistente de Triagem IA
           </h2>
         </div>
       )}
 
-      <div className={`flex-1 flex flex-col bg-slate-50/50 min-h-0 ${phase === 'chat' ? 'p-0 overflow-hidden' : 'overflow-y-auto p-4 md:p-6'}`}>
+      <div className={`flex-1 flex flex-col bg-slate-50/30 min-h-0 ${phase === 'chat' ? 'p-0 overflow-hidden' : 'overflow-y-auto p-3 md:p-4'}`}>
         <AnimatePresence mode="wait">
 
           {/* PHASE 1: VITALS FORM */}
           {phase === 'vitals' && (
             <motion.form
               key="vitals-form"
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
+              exit={{ opacity: 0, y: -10 }}
               onSubmit={handleStartChat}
-              className="space-y-5 max-w-2xl mx-auto w-full py-2"
+              className="space-y-3.5 max-w-2xl mx-auto w-full py-1.5"
             >
-              <div className="text-center max-w-md mx-auto space-y-2 mb-4">
-                <h3 className="text-lg font-black text-slate-800 uppercase tracking-tight">Vantagens do Rastreio Virtual</h3>
-                <p className="text-xs text-slate-500 leading-normal">
+              <div className="text-center max-w-md mx-auto space-y-1.5 mb-3">
+                <h3 className="text-base font-black text-slate-800 uppercase tracking-tight">Vantagens do Rastreio Virtual</h3>
+                <p className="text-[10px] text-slate-500 leading-normal">
                   Insira as suas informações fisiológicas atuais. Elas serão integradas na análise da IA para calcular a prioridade de atendimento clínico de forma exata.
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                <div className="flex flex-col gap-1 text-left">
-                  <label className="text-[10.5px] text-slate-500 font-black uppercase tracking-wider">Idade</label>
-                  <div className="flex items-center gap-2 border border-slate-200 focus-within:border-indigo-600 rounded-xl px-3 py-2 bg-slate-50/50">
-                    <Calendar size={15} className="text-indigo-600 shrink-0" />
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="flex flex-col gap-0.5 text-left">
+                  <label className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Idade</label>
+                  <div className="flex items-center gap-1.5 border border-slate-200 focus-within:border-indigo-600 rounded-lg px-2.5 py-1.5 bg-slate-50/50">
+                    <Calendar size={13} className="text-indigo-600 shrink-0" />
                     <input
                       type="number"
                       required
                       value={age}
                       onChange={e => setAge(Number(e.target.value))}
-                      className="w-full bg-transparent outline-none text-slate-800 text-xs font-bold"
+                      className="w-full bg-transparent outline-none text-slate-800 text-[10px] font-bold"
                     />
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1 text-left">
-                  <label className="text-[10.5px] text-slate-500 font-black uppercase tracking-wider">Género</label>
-                  <div className="flex items-center gap-2 border border-slate-200 focus-within:border-indigo-600 rounded-xl px-3 py-2 bg-slate-50/50">
-                    <User size={15} className="text-indigo-600 shrink-0" />
+                <div className="flex flex-col gap-0.5 text-left">
+                  <label className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Género</label>
+                  <div className="flex items-center gap-1.5 border border-slate-200 focus-within:border-indigo-600 rounded-lg px-2.5 py-1.5 bg-slate-50/50">
+                    <User size={13} className="text-indigo-600 shrink-0" />
                     <select
                       value={gender}
                       onChange={e => setGender(e.target.value)}
-                      className="w-full bg-transparent outline-none text-slate-800 text-xs font-bold border-none"
+                      className="w-full bg-transparent outline-none text-slate-800 text-[10px] font-bold border-none"
                     >
                       <option value="Masculino">Masculino</option>
                       <option value="Feminino">Feminino</option>
@@ -363,97 +362,96 @@ export function AvaliacaoIaContent({
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1 text-left">
-                  <label className="text-[10.5px] text-slate-500 font-black uppercase tracking-wider">Peso (Kg)</label>
-                  <div className="flex items-center gap-2 border border-slate-200 focus-within:border-indigo-600 rounded-xl px-3 py-2 bg-slate-50/50">
-                    <Scale size={15} className="text-indigo-600 shrink-0" />
+                <div className="flex flex-col gap-0.5 text-left">
+                  <label className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Peso (Kg)</label>
+                  <div className="flex items-center gap-1.5 border border-slate-200 focus-within:border-indigo-600 rounded-lg px-2.5 py-1.5 bg-slate-50/50">
+                    <Scale size={13} className="text-indigo-600 shrink-0" />
                     <input
                       type="number"
                       required
                       value={weight}
                       onChange={e => setWeight(Number(e.target.value))}
-                      className="w-full bg-transparent outline-none text-slate-800 text-xs font-bold"
+                      className="w-full bg-transparent outline-none text-slate-800 text-[10px] font-bold"
                     />
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1 text-left">
-                  <label className="text-[10.5px] text-slate-500 font-black uppercase tracking-wider">Altura (m)</label>
-                  <div className="flex items-center gap-2 border border-slate-200 focus-within:border-indigo-600 rounded-xl px-3 py-2 bg-slate-50/50">
-                    <Ruler size={15} className="text-indigo-600 shrink-0" />
+                <div className="flex flex-col gap-0.5 text-left">
+                  <label className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Altura (m)</label>
+                  <div className="flex items-center gap-1.5 border border-slate-200 focus-within:border-indigo-600 rounded-lg px-2.5 py-1.5 bg-slate-50/50">
+                    <Ruler size={13} className="text-indigo-600 shrink-0" />
                     <input
                       type="number"
                       step="0.01"
                       required
                       value={height}
                       onChange={e => setHeight(Number(e.target.value))}
-                      className="w-full bg-transparent outline-none text-slate-800 text-xs font-bold"
+                      className="w-full bg-transparent outline-none text-slate-800 text-[10px] font-bold"
                     />
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1 text-left col-span-2">
-                  <label className="text-[10.5px] text-slate-500 font-black uppercase tracking-wider">Contacto de Emergência</label>
-                  <div className="flex items-center gap-2 border border-slate-200 focus-within:border-indigo-600 rounded-xl px-3 py-2 bg-slate-50/50">
-                    <User size={15} className="text-indigo-600 shrink-0" />
+                <div className="flex flex-col gap-0.5 text-left col-span-2 sm:col-span-2">
+                  <label className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Contacto de Emergência</label>
+                  <div className="flex items-center gap-1.5 border border-slate-200 focus-within:border-indigo-600 rounded-lg px-2.5 py-1.5 bg-slate-50/50">
+                    <User size={13} className="text-indigo-600 shrink-0" />
                     <input
                       type="text"
                       required
                       value={emergencyContact}
                       onChange={e => setEmergencyContact(e.target.value)}
-                      className="w-full bg-transparent outline-none text-slate-800 text-xs font-bold"
+                      className="w-full bg-transparent outline-none text-slate-800 text-[10px] font-bold"
                       placeholder="+244 9..."
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100/60 text-left space-y-3">
-                <h4 className="text-xs font-black text-indigo-900 uppercase tracking-wider flex items-center gap-1.5">
-                  <Activity size={14} className="text-indigo-600" /> Antecedentes Médicos (Opcional)
+              <div className="bg-indigo-50/30 p-3 rounded-xl border border-indigo-100/50 text-left space-y-2">
+                <h4 className="text-[9.5px] font-black text-indigo-900 uppercase tracking-wider flex items-center gap-1">
+                  <Activity size={12} className="text-indigo-600" /> Antecedentes Médicos (Opcional)
                 </h4>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                   <div>
-                    <label className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider">Alergias</label>
+                    <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Alergias</label>
                     <textarea
                       value={allergies}
                       onChange={e => setAllergies(e.target.value)}
                       placeholder="Penicilina, paracetamol, etc."
-                      className="w-full h-12 bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none resize-none focus:border-indigo-500 mt-1"
+                      className="w-full h-10 bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-semibold outline-none resize-none focus:border-indigo-500 mt-0.5"
                     />
                   </div>
                   <div>
-                    <label className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider">Doenças Crónicas</label>
+                    <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Doenças Crónicas</label>
                     <textarea
                       value={diseases}
                       onChange={e => setDiseases(e.target.value)}
                       placeholder="Hipertensão, Diabetes, Asma..."
-                      className="w-full h-12 bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none resize-none focus:border-indigo-500 mt-1"
+                      className="w-full h-10 bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-semibold outline-none resize-none focus:border-indigo-500 mt-0.5"
                     />
                   </div>
                   <div>
-                    <label className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider">Medicamentos Atuais</label>
+                    <label className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Medicamentos Atuais</label>
                     <textarea
                       value={medications}
                       onChange={e => setMedications(e.target.value)}
                       placeholder="Lista de medicamentos ativos..."
-                      className="w-full h-12 bg-white border border-slate-200 rounded-xl p-2.5 text-xs font-semibold outline-none resize-none focus:border-indigo-500 mt-1"
+                      className="w-full h-10 bg-white border border-slate-200 rounded-lg p-2 text-[10px] font-semibold outline-none resize-none focus:border-indigo-500 mt-0.5"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="pt-3 text-center">
+              <div className="pt-2 text-center">
                 <button
                   type="submit" aria-label="Submeter formulário"
-                  className="px-8 py-3 bg-indigo-600 text-white font-black uppercase text-xs tracking-widest rounded-full hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center gap-2 mx-auto cursor-pointer"
+                  className="px-6 py-2.5 bg-indigo-600 text-white font-black uppercase text-[10px] tracking-widest rounded-full hover:bg-indigo-700 shadow-lg shadow-indigo-100/50 transition-all flex items-center gap-1.5 mx-auto cursor-pointer"
                 >
-                  Iniciar Chat Diagnóstico <ChevronRight size={15} />
+                  Iniciar Chat Diagnóstico <ChevronRight size={13} />
                 </button>
               </div>
             </motion.form>
           )}
-
 
           {/* PHASE 2: Symptom Chat Room */}
           {phase === 'chat' && (
@@ -462,29 +460,29 @@ export function AvaliacaoIaContent({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="w-full flex-1 flex flex-col text-left bg-slate-50/50 overflow-hidden"
+              className="w-full flex-1 flex flex-col text-left bg-slate-50/30 overflow-hidden"
             >
               {/* Chat Messages */}
-              <div className="flex-1 p-4 space-y-4 overflow-y-auto min-h-0">
+              <div className="flex-1 p-3 space-y-3 overflow-y-auto min-h-0">
                 {messages.map((m, i) => (
                   <div
                     key={i}
-                    className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'} gap-2.5 items-start`}
+                    className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'} gap-2 items-start`}
                   >
                     {m.sender === 'ai' && (
-                      <div className="w-8 h-8 rounded-lg bg-[#A855F7]/10 flex items-center justify-center shrink-0 text-[#A855F7]">
-                        <Bot size={15} />
+                      <div className="w-7 h-7 rounded-lg bg-[#A855F7]/10 flex items-center justify-center shrink-0 text-[#A855F7]">
+                        <Bot size={13} />
                       </div>
                     )}
                     <div
-                      className={`max-w-[80%] rounded-2xl px-5 py-3 text-xs md:text-[13.5px] leading-relaxed shadow-sm whitespace-pre-line ${
+                      className={`max-w-[82%] rounded-2xl px-4 py-2.5 text-[11px] md:text-[12px] leading-relaxed shadow-sm whitespace-pre-line ${
                         m.sender === 'user'
                           ? 'bg-[#2979FF] text-white rounded-tr-none font-semibold'
                           : 'bg-[#EBF3FC] text-slate-800 rounded-tl-none font-semibold border border-blue-50/40'
                       }`}
                     >
                       <p>{m.text}</p>
-                      <span className={`block text-[8.5px] mt-1 text-right ${m.sender === 'user' ? 'text-indigo-200' : 'text-slate-400'}`}>
+                      <span className={`block text-[7.5px] mt-0.5 text-right ${m.sender === 'user' ? 'text-indigo-200' : 'text-slate-400'}`}>
                         {m.time}
                       </span>
                     </div>
@@ -494,29 +492,29 @@ export function AvaliacaoIaContent({
 
               {/* Attachments preview */}
               {(uploadedPhotos.length > 0 || attachedFiles.length > 0) && (
-                <div className="px-4 py-2 bg-slate-100 border-t border-slate-200 flex flex-wrap gap-2">
+                <div className="px-3 py-1.5 bg-slate-100 border-t border-slate-200 flex flex-wrap gap-1.5">
                   {uploadedPhotos.map((p, i) => (
-                    <div key={i} className="px-2.5 py-1 bg-violet-50 border border-violet-200 text-violet-700 rounded-lg text-[10px] font-bold flex items-center gap-1">
+                    <div key={i} className="px-2 py-0.5 bg-violet-50 border border-violet-200 text-violet-700 rounded-lg text-[9px] font-bold flex items-center gap-1">
                       📸 Foto: {p} <button type="button" onClick={() => setUploadedPhotos([])} className="text-red-500 font-bold ml-1">×</button>
                     </div>
                   ))}
                   {attachedFiles.map((f, i) => (
-                    <div key={i} className="px-2.5 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded-lg text-[10px] font-bold flex items-center gap-1">
+                    <div key={i} className="px-2 py-0.5 bg-blue-50 border border-blue-200 text-blue-700 rounded-lg text-[9px] font-bold flex items-center gap-1">
                       📎 Ficheiro: {f} <button type="button" onClick={() => setAttachedFiles([])} className="text-red-500 font-bold ml-1">×</button>
                     </div>
                   ))}
                 </div>
               )}
 
-              {/* Chat Input controls with exact layout of the image */}
-              <div className="p-3 bg-white border-t border-slate-100 flex items-center gap-2">
+              {/* Chat Input controls */}
+              <div className="p-2.5 bg-white border-t border-slate-100 flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => simulateAttachment('photo')}
-                  className="w-11 h-11 rounded-2xl bg-[#A855F7] text-white hover:bg-[#9333EA] active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm"
+                  className="w-10 h-10 rounded-xl bg-[#A855F7] text-white hover:bg-[#9333EA] active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm"
                   title="Simular foto de sintoma"
                 >
-                  <Paperclip size={18} />
+                  <Paperclip size={16} />
                 </button>
 
                 <input
@@ -525,7 +523,7 @@ export function AvaliacaoIaContent({
                   onChange={e => setInputText(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Digite seus sintomas ou fale..."
-                  className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-2xl text-xs md:text-sm font-semibold outline-none focus:border-[#2979FF] text-slate-800 placeholder-slate-400/90 shadow-4xs"
+                  className="flex-1 px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-[11px] md:text-sm font-semibold outline-none focus:border-[#2979FF] text-slate-800 placeholder-slate-400/90 shadow-4xs"
                 />
 
                 <button
@@ -533,23 +531,22 @@ export function AvaliacaoIaContent({
                   onClick={() => {
                     setInputText("Sinto dor de cabeça constante, cansaço acumulado e calafrios há 2 dias.");
                   }}
-                  className="w-11 h-11 rounded-2xl bg-[#00D254] text-white hover:bg-[#00B849] active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm"
+                  className="w-10 h-10 rounded-xl bg-[#00D254] text-white hover:bg-[#00B849] active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm"
                   title="Falar"
                 >
-                  <Mic size={18} />
+                  <Mic size={16} />
                 </button>
 
                 <button
                   type="button"
                   onClick={handleSendMessage}
-                  className="px-5 h-11 bg-[#2979FF] hover:bg-[#1A68FF] active:scale-95 text-white font-extrabold text-xs md:text-sm uppercase tracking-wider rounded-2xl transition-all cursor-pointer shrink-0 flex items-center justify-center gap-2 shadow-sm"
+                  className="px-4 h-10 bg-[#2979FF] hover:bg-[#1A68FF] active:scale-95 text-white font-extrabold text-[10px] md:text-sm uppercase tracking-wider rounded-xl transition-all cursor-pointer shrink-0 flex items-center justify-center gap-1.5 shadow-sm"
                 >
-                  <Send size={15} /> Enviar
+                  <Send size={13} /> Enviar
                 </button>
               </div>
             </motion.div>
           )}
-
 
           {/* PHASE 3: ANALYZING LOADER */}
           {phase === 'analyzing' && (
@@ -558,18 +555,18 @@ export function AvaliacaoIaContent({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              className="flex-1 flex flex-col items-center justify-center py-16 text-center space-y-4"
+              className="flex-1 flex flex-col items-center justify-center py-8 text-center space-y-3"
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-indigo-100 rounded-full blur-xl scale-125 animate-pulse" />
-                <div className="w-16 h-16 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin flex items-center justify-center relative z-10">
-                  <Bot size={24} className="text-indigo-600" />
+                <div className="w-14 h-14 rounded-full border-4 border-indigo-200 border-t-indigo-600 animate-spin flex items-center justify-center relative z-10">
+                  <Bot size={22} className="text-indigo-600" />
                 </div>
               </div>
-              <div className="space-y-1 max-w-sm">
-                <h3 className="text-base font-black text-slate-800 uppercase tracking-tight">Cálculo Clínico em Curso...</h3>
-                <p className="text-[11px] text-slate-400 font-extrabold uppercase tracking-widest mt-0.5 animate-pulse">A aplicar algoritmo de Manchester</p>
-                <div className="pt-2 text-xs text-slate-500 leading-normal space-y-1">
+              <div className="space-y-0.5 max-w-sm">
+                <h3 className="text-sm font-black text-slate-800 uppercase tracking-tight">Cálculo Clínico em Curso...</h3>
+                <p className="text-[9.5px] text-slate-400 font-extrabold uppercase tracking-widest mt-0.5 animate-pulse">A aplicar algoritmo de Manchester</p>
+                <div className="pt-1.5 text-[9.5px] text-slate-500 leading-normal space-y-0.5">
                   <p className="animate-fadeIn">✓ Mapeando fatores fisiológicos de idade e género...</p>
                   <p className="animate-fadeIn delay-100">✓ Analisando descrição sintomática por PLN...</p>
                   <p className="animate-fadeIn delay-200">✓ Verificando focos epidemiológicos no município de {municipality}...</p>
@@ -578,21 +575,20 @@ export function AvaliacaoIaContent({
             </motion.div>
           )}
 
-
           {/* PHASE 4: TRIAGE REPORT VIEW & HOSPITAL SELECTOR */}
           {phase === 'result' && evaluationResult && (
             <motion.div
               key="result-report"
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-6 text-left max-w-3xl mx-auto w-full py-1"
+              className="space-y-4 text-left max-w-3xl mx-auto w-full py-0.5"
             >
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-50 border border-slate-100 rounded-2xl p-4">
-                <div className="flex items-center gap-2.5">
-                  <FileText className="text-indigo-600 shrink-0" size={20} />
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 bg-slate-50 border border-slate-100 rounded-xl p-3">
+                <div className="flex items-center gap-2">
+                  <FileText className="text-indigo-600 shrink-0" size={18} />
                   <div>
-                    <h3 className="text-sm font-black text-slate-900 uppercase leading-none">Relatório Clínico de Triagem</h3>
-                    <p className="text-[9px] text-slate-400 font-extrabold uppercase mt-1">Nº ID: {evaluationResult.id}</p>
+                    <h3 className="text-[11px] font-black text-slate-900 uppercase leading-none">Relatório Clínico de Triagem</h3>
+                    <p className="text-[8.5px] text-slate-400 font-extrabold uppercase mt-0.5">Nº ID: {evaluationResult.id}</p>
                   </div>
                 </div>
                 <button
@@ -601,50 +597,49 @@ export function AvaliacaoIaContent({
                     setEvaluationResult(null);
                     setMessages([{ ...INITIAL_CHAT_MESSAGE, time: new Date().toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' }) }]);
                   }}
-                  className="px-4 py-2 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-wider text-slate-700 cursor-pointer flex items-center gap-1.5 shadow-sm"
+                  className="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg text-[9px] font-black uppercase tracking-wider text-slate-700 cursor-pointer flex items-center gap-1 shadow-sm"
                 >
-                  <RefreshCw size={12} /> Nova Avaliação
+                  <RefreshCw size={10} /> Nova Avaliação
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr] gap-5 items-stretch">
-                
+              <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-4 items-start">
                 {/* Left Side: Report Details */}
-                <div className="border border-slate-200 rounded-2xl p-5 space-y-4 shadow-sm bg-white">
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                    <span className="text-[10.5px] text-slate-400 font-black uppercase tracking-wider">Prioridade de Triagem</span>
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border flex items-center gap-1.5 ${getPriorityColor(evaluationResult.priority)}`}>
-                      <span className={`w-2 h-2 rounded-full ${getPriorityDot(evaluationResult.priority)} animate-pulse`} />
+                <div className="border border-slate-200 rounded-xl p-4 space-y-3 shadow-sm bg-white">
+                  <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                    <span className="text-[9.5px] text-slate-400 font-black uppercase tracking-wider">Prioridade de Triagem</span>
+                    <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border flex items-center gap-1 ${getPriorityColor(evaluationResult.priority)}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${getPriorityDot(evaluationResult.priority)} animate-pulse`} />
                       {evaluationResult.priority}
                     </span>
                   </div>
 
-                  <div className="space-y-1">
-                    <span className="text-[9.5px] text-slate-400 font-black uppercase tracking-wider">Resumo da Avaliação</span>
-                    <p className="text-xs text-slate-700 leading-relaxed font-semibold bg-slate-50/50 p-3 rounded-xl border border-slate-100">
+                  <div className="space-y-0.5">
+                    <span className="text-[9px] text-slate-400 font-black uppercase tracking-wider">Resumo da Avaliação</span>
+                    <p className="text-[10px] text-slate-700 leading-relaxed font-semibold bg-slate-50/50 p-2.5 rounded-lg border border-slate-100">
                       {evaluationResult.aiSummary}
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 bg-indigo-50/20 p-3 rounded-xl border border-indigo-100/30">
+                  <div className="grid grid-cols-2 gap-2 bg-indigo-50/20 p-2.5 rounded-lg border border-indigo-100/30">
                     <div>
-                      <span className="text-[9px] text-indigo-900 font-black uppercase tracking-wider block">Sugestão de Especialidade</span>
-                      <span className="text-xs font-extrabold text-slate-800 mt-0.5 block">{evaluationResult.suggestedSpecialty}</span>
+                      <span className="text-[8.5px] text-indigo-900 font-black uppercase tracking-wider block">Sugestão de Especialidade</span>
+                      <span className="text-[10px] font-extrabold text-slate-800 mt-0.5 block">{evaluationResult.suggestedSpecialty}</span>
                     </div>
                     <div>
-                      <span className="text-[9px] text-indigo-900 font-black uppercase tracking-wider block">Causas Prováveis</span>
-                      <span className="text-xs font-bold text-slate-600 mt-0.5 block">
+                      <span className="text-[8.5px] text-indigo-900 font-black uppercase tracking-wider block">Causas Prováveis</span>
+                      <span className="text-[10px] font-bold text-slate-600 mt-0.5 block">
                         {evaluationResult.possibleCauses.join(', ')}
                       </span>
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <span className="text-[9.5px] text-slate-400 font-black uppercase tracking-wider block">Recomendações Médicas IA</span>
-                    <ul className="space-y-2">
+                  <div className="space-y-1.5">
+                    <span className="text-[9px] text-slate-400 font-black uppercase tracking-wider block">Recomendações Médicas IA</span>
+                    <ul className="space-y-1.5">
                       {evaluationResult.recommendations.map((rec, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs font-semibold text-slate-600 leading-normal">
-                          <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                        <li key={i} className="flex items-start gap-1.5 text-[10px] font-semibold text-slate-600 leading-normal">
+                          <CheckCircle2 size={12} className="text-emerald-500 shrink-0 mt-0.5" />
                           <span>{rec}</span>
                         </li>
                       ))}
@@ -653,47 +648,47 @@ export function AvaliacaoIaContent({
                 </div>
 
                 {/* Right Side: Hospital Forwarding */}
-                <div className="border border-slate-200 rounded-2xl p-5 bg-slate-55/40 flex flex-col justify-between space-y-4">
+                <div className="border border-slate-200 rounded-xl p-4 bg-slate-55/30 flex flex-col justify-between space-y-3">
                   {sentHospitalName ? (
                     <motion.div
                       initial={{ scale: 0.95, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-3 bg-white rounded-xl border border-emerald-100 shadow-sm h-full"
+                      className="flex-1 flex flex-col items-center justify-center text-center p-4 space-y-2 bg-white rounded-lg border border-emerald-100 shadow-sm h-full"
                     >
-                      <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-500 shadow-sm">
-                        <CheckCircle2 size={24} />
+                      <div className="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-500 shadow-sm">
+                        <CheckCircle2 size={20} />
                       </div>
-                      <div className="space-y-1">
-                        <span className="text-[10px] text-emerald-600 font-black uppercase tracking-widest">Enviado com Sucesso</span>
+                      <div className="space-y-0.5">
+                        <span className="text-[9px] text-emerald-600 font-black uppercase tracking-widest">Enviado com Sucesso</span>
                         <h4 className="text-sm font-black text-slate-900 leading-tight uppercase mt-0.5">{sentHospitalName}</h4>
-                        <p className="text-[11px] text-slate-500 leading-normal mt-2">
+                        <p className="text-[10px] text-slate-500 leading-normal mt-1.5">
                           O relatório clínico foi integrado no prontuário do hospital. Quando der entrada, os médicos já estarão cientes da sua triagem preliminar!
                         </p>
                       </div>
                       <button
                         onClick={() => setTab('historico')}
-                        className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[10px] uppercase tracking-wider rounded-xl cursor-pointer shadow-sm mt-2"
+                        className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-[9px] uppercase tracking-wider rounded-lg cursor-pointer shadow-sm mt-1.5"
                       >
                         Ver no meu Histórico
                       </button>
                     </motion.div>
                   ) : (
-                    <div className="space-y-4 text-left flex-1 flex flex-col justify-between">
-                      <div className="space-y-2">
-                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                          <Hospital size={14} className="text-indigo-600 animate-pulse" /> Encaminhar Relatório
+                    <div className="space-y-3 text-left flex-1 flex flex-col justify-between">
+                      <div className="space-y-1.5">
+                        <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-wider flex items-center gap-1">
+                          <Hospital size={12} className="text-indigo-600 animate-pulse" /> Encaminhar Relatório
                         </h4>
-                        <p className="text-[11.5px] text-slate-500 leading-normal font-semibold">
+                        <p className="text-[10.5px] text-slate-500 leading-normal font-semibold">
                           Ao escolher e enviar este relatório, o hospital recebe o seu histórico de triagem de imediato, adiantando o seu acolhimento e poupando tempo na admissão física.
                         </p>
                       </div>
 
-                      <div className="space-y-3 pt-2">
-                        <label className="text-[10px] text-slate-500 font-black uppercase tracking-wider block">Selecionar Posto de Saúde / Hospital</label>
+                      <div className="space-y-2.5 pt-1">
+                        <label className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider block">Selecionar Posto de Saúde / Hospital</label>
                         <select
                           value={selectedHospitalId}
                           onChange={e => setSelectedHospitalId(e.target.value)}
-                          className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:border-indigo-500 outline-none shadow-sm"
+                          className="w-full px-2.5 py-2 bg-white border border-slate-200 rounded-lg text-[10px] font-bold text-slate-800 focus:border-indigo-500 outline-none shadow-sm"
                         >
                           {hospitals.map(h => (
                             <option key={h.id} value={h.id}>
@@ -707,16 +702,16 @@ export function AvaliacaoIaContent({
                           const h = hospitals.find(x => x.id === selectedHospitalId);
                           if (!h) return null;
                           return (
-                            <div className="bg-white border border-slate-100 rounded-xl p-3 text-[11px] space-y-1.5 font-bold shadow-sm text-slate-600">
-                              <p className="text-slate-800 font-extrabold uppercase text-[10px] tracking-tight">{h.name}</p>
-                              <div className="flex flex-wrap gap-1.5">
+                            <div className="bg-white border border-slate-100 rounded-lg p-2.5 text-[10px] space-y-1 font-bold shadow-sm text-slate-600">
+                              <p className="text-slate-800 font-extrabold uppercase text-[9px] tracking-tight">{h.name}</p>
+                              <div className="flex flex-wrap gap-1">
                                 {h.specialties.slice(0, 2).map((sp, i) => (
-                                  <span key={i} className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] uppercase tracking-wider">
+                                  <span key={i} className="px-1 py-0.5 bg-slate-100 text-slate-600 rounded text-[8px] uppercase tracking-wider">
                                     {sp}
                                   </span>
                                 ))}
                               </div>
-                              <div className="flex items-center justify-between text-[9px] text-slate-400 uppercase font-black pt-1 border-t border-slate-50">
+                              <div className="flex items-center justify-between text-[8px] text-slate-400 uppercase font-black pt-1 border-t border-slate-50">
                                 <span>Tempo de espera: <b className="text-indigo-600 font-extrabold">{h.avgWaitTime}</b></span>
                                 <span>Distância: <b className="text-slate-700">{h.distance}</b></span>
                               </div>
@@ -725,16 +720,16 @@ export function AvaliacaoIaContent({
                         })()}
                       </div>
 
-                      <div className="pt-4 border-t border-slate-200">
+                      <div className="pt-3 border-t border-slate-200">
                         <button
                           type="button"
                           disabled={isSendingToHospital}
                           onClick={handleSendToHospital}
-                          className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-widest rounded-xl shadow-lg shadow-emerald-100 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                          className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-[9.5px] uppercase tracking-widest rounded-xl shadow-lg shadow-emerald-100 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                         >
                           {isSendingToHospital ? (
                             <>
-                              <RefreshCw size={15} className="animate-spin" /> A Enviar Dados...
+                              <RefreshCw size={13} className="animate-spin" /> A Enviar Dados...
                             </>
                           ) : (
                             <>

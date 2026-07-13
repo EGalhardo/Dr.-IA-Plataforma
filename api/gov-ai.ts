@@ -1,7 +1,60 @@
-import type { VercelRequest, VercelResponse } from './_utils';
-import { handleCors, requirePost, getAI, getGroq } from './_utils';
-import Groq from 'groq-sdk';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI } from '@google/genai';
+import Groq from 'groq-sdk';
+
+function handleCors(req: VercelRequest, res: VercelResponse): boolean {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.status(200).json({});
+    return true;
+  }
+  return false;
+}
+
+function requirePost(req: VercelRequest, res: VercelResponse): boolean {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return false;
+  }
+  return true;
+}
+
+let ai: GoogleGenAI | null = null;
+let groq: Groq | null = null;
+
+function getAI(): GoogleGenAI | null {
+  if (!ai) {
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+    if (apiKey) {
+      try {
+        ai = new GoogleGenAI({
+          apiKey,
+          apiVersion: 'v1beta',
+          httpOptions: { headers: { 'User-Agent': 'vercel-deploy' } }
+        });
+      } catch (e) {
+        console.warn('Failed to instantiate GoogleGenAI client:', e);
+      }
+    }
+  }
+  return ai;
+}
+
+function getGroq(): Groq | null {
+  if (!groq) {
+    const groqApiKey = process.env.GROQ_API_KEY || process.env.Teste01 || '';
+    if (groqApiKey) {
+      try {
+        groq = new Groq({ apiKey: groqApiKey });
+      } catch (e) {
+        console.warn('Failed to instantiate Groq client:', e);
+      }
+    }
+  }
+  return groq;
+}
 
 const DRIA_GOV_PROMPTS: Record<string, { system: string; user: (text: string, context?: string) => string }> = {
   summarize: {
@@ -95,23 +148,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const systemPrompt = promptConfig.system;
     const userPrompt = promptConfig.user(text, context);
 
-    const ai = getAI();
-    if (ai) {
-      const result = await tryGemini(ai, systemPrompt, userPrompt);
+    const aiClient = getAI();
+    if (aiClient) {
+      const result = await tryGemini(aiClient, systemPrompt, userPrompt);
       if (result) return res.status(200).json({ result });
     }
 
-    const groq = getGroq();
-    if (groq) {
-      const result = await tryGroq(groq, systemPrompt, userPrompt);
+    const groqClient = getGroq();
+    if (groqClient) {
+      const result = await tryGroq(groqClient, systemPrompt, userPrompt);
       if (result) return res.status(200).json({ result });
     }
 
-    // Fallback mock response
     const mockResult = MOCK_RESPONSES[action] || MOCK_RESPONSES.help;
     return res.status(200).json({ result: mockResult });
   } catch (err: any) {
     console.error('error in /api/gov-ai:', err);
-    res.status(500).json({ error: err.message || 'Erro desconhecido na central de IA.' });
+    res.status(500).json({ error: err?.message || 'Erro desconhecido na central de IA.' });
   }
 }

@@ -1,7 +1,60 @@
-import type { VercelRequest, VercelResponse } from './_utils';
-import { handleCors, requirePost, getAI, getGroq } from './_utils';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI, Type } from '@google/genai';
 import Groq from 'groq-sdk';
+
+function handleCors(req: VercelRequest, res: VercelResponse): boolean {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.status(200).json({});
+    return true;
+  }
+  return false;
+}
+
+function requirePost(req: VercelRequest, res: VercelResponse): boolean {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return false;
+  }
+  return true;
+}
+
+let ai: GoogleGenAI | null = null;
+let groq: Groq | null = null;
+
+function getAI(): GoogleGenAI | null {
+  if (!ai) {
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+    if (apiKey) {
+      try {
+        ai = new GoogleGenAI({
+          apiKey,
+          apiVersion: 'v1beta',
+          httpOptions: { headers: { 'User-Agent': 'vercel-deploy' } }
+        });
+      } catch (e) {
+        console.warn('Failed to instantiate GoogleGenAI client:', e);
+      }
+    }
+  }
+  return ai;
+}
+
+function getGroq(): Groq | null {
+  if (!groq) {
+    const groqApiKey = process.env.GROQ_API_KEY || process.env.Teste01 || '';
+    if (groqApiKey) {
+      try {
+        groq = new Groq({ apiKey: groqApiKey });
+      } catch (e) {
+        console.warn('Failed to instantiate Groq client:', e);
+      }
+    }
+  }
+  return groq;
+}
 
 const LANGUAGE_NAMES: Record<string, string> = {
   um: 'Umbundu',
@@ -171,14 +224,14 @@ Retornar apenas um array JSON como este exemplo:
 ]`;
 
 async function tryGeminiTranslate(
-  ai: GoogleGenAI,
+  aiClient: GoogleGenAI,
   systemPrompt: string,
   texts: string[]
 ): Promise<string[] | null> {
   try {
     const userPrompt = `--------------------------------------------------\nENTRADA\n--------------------------------------------------\n\nSTRINGS:\n${JSON.stringify(texts, null, 2)}`;
 
-    const response = await ai.models.generateContent({
+    const response = await aiClient.models.generateContent({
       model: 'gemini-3.5-flash',
       contents: userPrompt,
       config: {
@@ -211,14 +264,14 @@ async function tryGeminiTranslate(
 }
 
 async function tryGroqTranslate(
-  groq: Groq,
+  groqClient: Groq,
   systemPrompt: string,
   texts: string[]
 ): Promise<string[] | null> {
   try {
     const userPrompt = `--------------------------------------------------\nENTRADA\n--------------------------------------------------\n\nSTRINGS:\n${JSON.stringify(texts, null, 2)}`;
 
-    const completion = await groq.chat.completions.create({
+    const completion = await groqClient.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt + ' Retorne SOMENTE a lista JSON bruta, sem explicações, marcações markdown ou comentários adicionais, começando com [ e terminando com ].' },
         { role: 'user', content: userPrompt },
@@ -262,19 +315,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const langName = LANGUAGE_NAMES[targetLanguage] || targetLanguage;
     const systemPrompt = SYSTEM_PROMPT_TEMPLATE.replace('{LANG_NAME}', langName);
 
-    const ai = getAI();
-    if (ai) {
-      const result = await tryGeminiTranslate(ai, systemPrompt, texts);
+    const aiClient = getAI();
+    if (aiClient) {
+      const result = await tryGeminiTranslate(aiClient, systemPrompt, texts);
       if (result) return res.status(200).json({ translations: result });
     }
 
-    const groq = getGroq();
-    if (groq) {
-      const result = await tryGroqTranslate(groq, systemPrompt, texts);
+    const groqClient = getGroq();
+    if (groqClient) {
+      const result = await tryGroqTranslate(groqClient, systemPrompt, texts);
       if (result) return res.status(200).json({ translations: result });
     }
 
-    // Fallback: return original texts
     return res.status(200).json({ translations: texts });
   } catch (err: any) {
     console.error('Error in /api/translate:', err);

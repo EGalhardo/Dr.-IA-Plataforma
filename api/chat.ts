@@ -1,7 +1,60 @@
-import type { VercelRequest, VercelResponse } from './_utils';
-import { handleCors, requirePost, getAI, getGroq } from './_utils';
-import Groq from 'groq-sdk';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { GoogleGenAI } from '@google/genai';
+import Groq from 'groq-sdk';
+
+function handleCors(req: VercelRequest, res: VercelResponse): boolean {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    res.status(200).json({});
+    return true;
+  }
+  return false;
+}
+
+function requirePost(req: VercelRequest, res: VercelResponse): boolean {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' });
+    return false;
+  }
+  return true;
+}
+
+let ai: GoogleGenAI | null = null;
+let groq: Groq | null = null;
+
+function getAI(): GoogleGenAI | null {
+  if (!ai) {
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+    if (apiKey) {
+      try {
+        ai = new GoogleGenAI({
+          apiKey,
+          apiVersion: 'v1beta',
+          httpOptions: { headers: { 'User-Agent': 'vercel-deploy' } }
+        });
+      } catch (e) {
+        console.warn('Failed to instantiate GoogleGenAI client:', e);
+      }
+    }
+  }
+  return ai;
+}
+
+function getGroq(): Groq | null {
+  if (!groq) {
+    const groqApiKey = process.env.GROQ_API_KEY || process.env.Teste01 || '';
+    if (groqApiKey) {
+      try {
+        groq = new Groq({ apiKey: groqApiKey });
+      } catch (e) {
+        console.warn('Failed to instantiate Groq client:', e);
+      }
+    }
+  }
+  return groq;
+}
 
 const DRIA_PROJECT_INFO = `
 O Dr.IA é uma plataforma inteligente de saúde digital concebida para aproximar os cidadãos angolanos dos serviços de saúde através da Inteligência Artificial. O sistema funciona como um ecossistema integrado onde três painéis trabalham em conjunto: Cidadãos, Hospitais e Ministério da Saúde (MINSA).
@@ -58,12 +111,12 @@ const DIALECT_MAP: Record<string, string> = {
 };
 
 async function tryGroqChat(
-  groq: Groq,
+  groqClient: Groq,
   systemPrompt: string,
   messages: { role: 'user' | 'assistant'; content: string }[]
 ): Promise<string | null> {
   try {
-    const completion = await groq.chat.completions.create({
+    const completion = await groqClient.chat.completions.create({
       messages: [
         { role: 'system', content: systemPrompt },
         ...messages.map((m) => ({ role: m.role, content: m.content })),
@@ -79,7 +132,7 @@ async function tryGroqChat(
 }
 
 async function tryGeminiChat(
-  ai: GoogleGenAI,
+  aiClient: GoogleGenAI,
   systemPrompt: string,
   messages: { role: 'user' | 'assistant'; content: string }[]
 ): Promise<string | null> {
@@ -89,7 +142,7 @@ async function tryGeminiChat(
       parts: [{ text: m.content }],
     }));
 
-    const response = await ai.models.generateContent({
+    const response = await aiClient.models.generateContent({
       model: 'gemini-3.5-flash',
       contents: formattedContents,
       config: {
@@ -129,18 +182,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? `Você é o Consultor de Segurança e Legislação do SOC do Governo de Angola. Sua função é auxiliar administradores na gestão de protocolos de emergência, interoperabilidade e redação de normas. ${DRIA_PROJECT_INFO} Inicie sempre saudando e perguntando como pode ser útil. Responda de forma eficiente, clara e profissional. Não utilize asteriscos ou símbolos de formatação na sua fala. Utilize sempre o nome completo Dr.IA. Se a explicação for muito longa, apresente primeiro o essencial e interrompa para perguntar se o usuário deseja que você continue detalhando ou prefere focar em algo específico.`
       : `Você é o assistente oficial do Dr.IA. ${DRIA_PROJECT_INFO} Inicie sempre saudando e perguntando como pode ser útil. Ajude o usuário com informações sobre seus documentos e correspondências de forma eficiente. Seja cordial, humano e acolhedor. Utilize sempre o nome completo Dr.IA. Não utilize asteriscos ou símbolos de formatação para garantir uma fala limpa e natural. Caso sua resposta seja longa, apresente primeiro os pontos essenciais e interrompa para perguntar se o usuário gostaria que continuasse detalhando ou se prefere focar em algo específico. Responda em Português de Angola.`;
 
-    // Inject active page context if available
     if (currentPage && pageContext) {
       systemPrompt += `\n\n[CONTEXTO DO ECRÃ ATUAL DO UTILIZADOR]:\nO usuário está visualizando a página "${currentPage}" no momento. \nO conteúdo e dados visíveis no ecrã dele são:\n"""${pageContext}"""\nSe o utilizador pedir para explicar o que está aberto, resumir a página, ou fizer perguntas sobre o conteúdo atual do ecrã, utilize os dados acima de forma natural para responder de maneira precisa e informativa.`;
     }
 
-    // Handle dialect
     if (language && language !== 'pt') {
       const selectedDialect = DIALECT_MAP[language] || 'Português de Angola';
       systemPrompt += `\n\n[CRITICAL DIALECT INSTRUCTION]:\nO utilizador atual prefere interagir no dialeto regional de Angola: "${selectedDialect}". Por favor, ignore a instrução de responder em Português de Angola; você DEVE responder integralmente no dialeto "${selectedDialect}". Seja nativo, evite jargões em português fora de termos oficiais inevitáveis, e mantenha o tom do Dr.IA nesta língua regional.`;
     }
 
-    // Extract any incoming system message from frontend, and merge it with backend systemPrompt
     let finalSystemPrompt = systemPrompt;
     const filteredMessages = (messages || []).filter((m: any) => {
       if (m.role === 'system' || m.role === 'System') {
@@ -152,7 +202,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return true;
     });
 
-    // Merge consecutive messages with the same role to strictly alternate
     const alternateMessages: { role: 'user' | 'assistant'; content: string }[] = [];
     for (const msg of filteredMessages) {
       const role = msg.role === 'assistant' || msg.role === 'model' || msg.role === 'bot' ? 'assistant' : 'user';
@@ -166,21 +215,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    // 1. Try Groq
-    const groq = getGroq();
-    if (groq) {
-      const result = await tryGroqChat(groq, finalSystemPrompt, alternateMessages);
+    const groqClient = getGroq();
+    if (groqClient) {
+      const result = await tryGroqChat(groqClient, finalSystemPrompt, alternateMessages);
       if (result) return res.status(200).json({ message: result });
     }
 
-    // 2. Try Gemini
-    const ai = getAI();
-    if (ai) {
-      const result = await tryGeminiChat(ai, finalSystemPrompt, alternateMessages);
+    const aiClient = getAI();
+    if (aiClient) {
+      const result = await tryGeminiChat(aiClient, finalSystemPrompt, alternateMessages);
       if (result) return res.status(200).json({ message: result });
     }
 
-    // 3. Offline fallback
     const lastMessageObj = messages?.length > 0 ? messages[messages.length - 1] : null;
     const lastMessage = lastMessageObj ? (lastMessageObj.content || lastMessageObj.text || '') : '';
     const offlineResponse = getOfflineResponse(lastMessage);

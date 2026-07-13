@@ -260,7 +260,7 @@ export function TrabalhadoresHospitalContent() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[900px] border-collapse text-left">
             <thead>
-              <tr className="bg-[#0c2340] text-white text-[10px] font-black uppercase tracking-widest">
+              <tr className="bg-[#2C5EE5] text-white text-[10px] font-black uppercase tracking-widest">
                 <th className="py-4.5 px-6 rounded-tl-[16px]">Colaborador / Trabalhador</th>
                 <th className="py-4.5 px-6">E-mail / Contacto</th>
                 <th className="py-4.5 px-6">Telefone</th>

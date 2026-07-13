@@ -316,6 +316,7 @@ export interface SessionUser {
   verificationLevel: 'Verificado' | 'Totalmente Verificado' | 'Pendente';
   confidenceScore: number;
   lastAccess: string;
+  theme?: 'light' | 'dark';
 }
 
 export interface ActiveProfile {

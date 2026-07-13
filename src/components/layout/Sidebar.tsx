@@ -60,12 +60,12 @@ const institutionItems: MenuItem[] = [
 const adminItems: MenuItem[] = [
   { id: 'minsa-dashboard', label: 'Dashboard Nacional', icon: BarChart3 },
   { id: 'minsa-vigilancia', label: 'Vigilância', icon: Shield },
-  { id: 'minsa-hospitals', label: 'Hospitais', icon: Building2 },
-  { id: 'minsa-ia', label: 'IA Preditiva', icon: Brain, badge: 'AI' },
   { id: 'minsa-estatisticas', label: 'Estatísticas', icon: Activity },
   { id: 'minsa-relatorios', label: 'Relatórios', icon: FileText },
-  { id: 'minsa-configuracao', label: 'Configuração', icon: Settings },
+  { id: 'minsa-ia', label: 'IA Preditiva', icon: Brain, badge: 'AI' },
+  { id: 'minsa-hospitals', label: 'Hospitais', icon: Building2 },
   { id: 'minsa-trabalhadores', label: 'Equipas', icon: Users },
+  { id: 'minsa-configuracao', label: 'Configuração', icon: Settings },
   { id: 'minsa-conta', label: 'Conta', icon: User },
 ];
 

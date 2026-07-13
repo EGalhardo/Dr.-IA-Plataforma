@@ -324,26 +324,25 @@ export function AngolaMap({ markers, onProvinceClick, selected }: AngolaMapProps
                 <path
                   key={p.name}
                   d={p.path}
-                  fill="url(#dria-ang-fill)"
-                  stroke="#cbd5e1"
+                  fill={hovered === p.name || selected === p.name ? RISK_COLORS[p.level].ring : "url(#dria-ang-fill)"}
+                  stroke={hovered === p.name || selected === p.name ? RISK_COLORS[p.level].stroke : "#cbd5e1"}
                   strokeWidth={1.4}
                   strokeLinejoin="round"
+                  style={{ transition: 'all 0.2s', cursor: 'pointer' }}
+                  onMouseEnter={() => setHovered(p.name)}
+                  onMouseLeave={() => setHovered(null)}
+                  onClick={(e) => {
+                    const el = containerRef.current;
+                    if (!el) return;
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    setPopup(prev => (prev && prev.m.name === p.name ? null : { m: p, x, y }));
+                    if (onProvinceClick) onProvinceClick(p);
+                  }}
                 />
               ))}
             </g>
-
-            {/* Fronteiras com destaque no hover/select */}
-            {merged.map(p => (
-              <path
-                key={`b-${p.name}`}
-                d={p.path}
-                fill="transparent"
-                stroke={hovered === p.name || selected === p.name ? '#0369a1' : '#94a3b8'}
-                strokeWidth={hovered === p.name || selected === p.name ? 2.2 : 0.9}
-                strokeLinejoin="round"
-                style={{ pointerEvents: 'none', transition: 'all 0.2s' }}
-              />
-            ))}
 
             {/* Etiquetas das provincias */}
             {merged.map(p => {

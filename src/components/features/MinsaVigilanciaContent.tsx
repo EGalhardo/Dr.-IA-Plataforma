@@ -87,7 +87,7 @@ export function MinsaVigilanciaContent({ evaluations = [] }: MinsaVigilanciaCont
   const [searchQuery, setSearchQuery] = useState('');
   const [selected, setSelected] = useState<OutbreakMetric | null>(null);
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'mapa' | 'grafico'>('mapa');
+  const [viewMode, setViewMode] = useState<'oficial' | 'grafico'>('oficial');
 
   // Classifica uma avaliacao por doenca
   const classifyEval = (text: string): { malaria: number; cholera: number; tb: number; measles: number; ebola: number } => {
@@ -317,77 +317,64 @@ export function MinsaVigilanciaContent({ evaluations = [] }: MinsaVigilanciaCont
       </div>
 
       {/* Toggle Mapa/Grafico */}
-      <div className="flex items-center gap-2">
-        <button onClick={()=>setViewMode('mapa')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider cursor-pointer transition-all ${viewMode==='mapa'?'bg-medic-700 text-white shadow-md':'bg-white border border-slate-200 text-slate-500 hover:bg-slate-50'}`}><MapPin size={13} className="inline mr-1"/>Mapa</button>
-        <button onClick={()=>setViewMode('grafico')} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider cursor-pointer transition-all ${viewMode==='grafico'?'bg-medic-700 text-white shadow-md':'bg-white border border-slate-200 text-slate-500 hover:bg-slate-50'}`}><Activity size={13} className="inline mr-1"/>Gráfico</button>
+      <div className="flex items-center gap-2 flex-wrap">
+        <button
+          id="btn-tab-oficial"
+          onClick={() => setViewMode('oficial')}
+          className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider cursor-pointer transition-all ${viewMode === 'oficial' ? 'bg-medic-700 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-500 hover:bg-slate-50'}`}
+        >
+          <Radio size={13} className="inline mr-1"/>Mapa de Surto (Oficial)
+        </button>
+        <button
+          id="btn-tab-grafico"
+          onClick={() => setViewMode('grafico')}
+          className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider cursor-pointer transition-all ${viewMode === 'grafico' ? 'bg-medic-700 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-500 hover:bg-slate-50'}`}
+        >
+          <Activity size={13} className="inline mr-1"/>Gráficos de Análise
+        </button>
       </div>
 
       <AnimatePresence mode="wait">
-        {viewMode==='mapa'?(
-          <motion.div key="mapa" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-10}} className="space-y-6">
-            {/* === MAPA PRINCIPAL — Mapeamento Inteligente de Surtos === */}
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-              <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between flex-wrap gap-2">
-                <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                  <MapPin size={16} className="text-red-600"/>Mapeamento Inteligente de Surtos – Angola
-                </h3>
-                <span className="text-[9px] text-slate-400 font-extrabold uppercase flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"/>21 Províncias · Tempo real
-                </span>
-              </div>
-              <AngolaMap
-                markers={provinceMarkers}
-                selected={selectedProvince}
-                onProvinceClick={(m) => setSelectedProvince(m.name === selectedProvince ? null : m.name)}
-              />
-            </div>
-
-            {/* Tabela de municipios */}
-            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-              <div className="p-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between flex-wrap gap-2">
-                <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                  <Activity size={16} className="text-red-600 animate-pulse"/>Prevalência por Município
-                </h3>
-                <div className="flex items-center gap-1.5 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-white">
-                  <Search size={12} className="text-slate-400 shrink-0"/>
-                  <input type="text" placeholder="Filtrar..." value={searchQuery} onChange={e=>setSearchQuery(e.target.value)} className="w-32 bg-transparent outline-none text-[10px] font-bold text-slate-800"/>
+        {viewMode === 'oficial' && (
+          <motion.div key="oficial" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-10}} className="space-y-6">
+            <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden p-6 text-center space-y-4" id="card-mapa-oficial">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4 flex-wrap gap-2">
+                <div className="text-left">
+                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight">Mapa de Vigilância de Angola (Oficial)</h3>
+                  <p className="text-[10px] text-slate-500 font-semibold mt-0.5">Mapeamento nacional e monitorização epidemiológica</p>
                 </div>
+                <a
+                  href="https://i.postimg.cc/SRWc44XK/Mapeamento-de-surto.png"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all"
+                >
+                  Abrir imagem original
+                </a>
               </div>
-              <div className="divide-y divide-slate-100 max-h-[400px] overflow-y-auto">
-                {filtered.map(m=>(
-                  <div key={m.municipality} onClick={()=>setSelected(selected?.municipality===m.municipality?null:m)}
-                       className={`p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors cursor-pointer text-xs font-bold text-slate-600 ${selected?.municipality===m.municipality?'bg-medic-50/60 border-l-2 border-l-medic-500':'hover:bg-slate-50/40'}`}>
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 ${m.aiStatus==='Alerta de Surto'?'bg-red-50 text-red-600 border-red-200':m.aiStatus==='Monitorizado'?'bg-amber-50 text-amber-600 border-amber-200':'bg-emerald-50 text-emerald-600 border-emerald-200'}`}>
-                        <MapPin size={14}/>
-                      </div>
-                      <div className="text-left space-y-0.5">
-                        <h4 className="text-xs font-extrabold text-slate-900 uppercase tracking-tight">{m.municipality}</h4>
-                        <p className="text-[9px] text-slate-400">{m.province}</p>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-5 gap-1.5 bg-slate-50 p-1.5 border rounded-lg grow sm:max-w-xs">
-                      {[['Mal',m.malariaCases,false],['Col',m.choleraCases,m.choleraCases>0],['TB',m.tuberculosisCases,false],['Sar',m.measlesCases,m.measlesCases>10],['Ebo',m.ebolaCases,m.ebolaCases>0]].map(([l,v,a]:any[])=>(
-                        <div key={l} className="text-center">
-                          <span className="text-[6.5px] text-slate-400 block uppercase font-black">{l}</span>
-                          <span className={`text-[9px] font-black ${a?'text-red-600 animate-pulse':'text-slate-800'}`}>{v}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="shrink-0">
-                      <span className={`px-2 py-0.5 rounded border text-[8px] uppercase tracking-wide ${getBadge(m.aiStatus)} ${m.aiStatus==='Alerta de Surto'?'animate-pulse':''}`}>{m.aiStatus}</span>
-                    </div>
-                  </div>
-                ))}
+
+              <div className="relative border border-slate-200/60 rounded-2xl overflow-hidden bg-slate-50/50 flex items-center justify-center p-4 min-h-[500px]">
+                <img
+                  src="https://i.postimg.cc/SRWc44XK/Mapeamento-de-surto.png"
+                  alt="Mapa Oficial de Surto"
+                  referrerPolicy="no-referrer"
+                  className="max-h-[600px] w-auto object-contain rounded-xl shadow-md border border-slate-100"
+                />
               </div>
-              <div className="p-4 border-t border-slate-100 text-center text-[10px] text-slate-400 font-extrabold uppercase flex items-center gap-1.5 justify-center">
-                <CheckCircle className="text-emerald-500" size={13}/>Sincronizado com os Postos Médicos do Estado
+
+              <div className="bg-slate-50/80 border border-slate-200/60 rounded-xl p-3 text-left">
+                <span className="text-[9px] font-black uppercase tracking-wider text-medic-600 block mb-1">Nota Informativa</span>
+                <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                  Este mapeamento de surto é homologado pelo Ministério da Saúde (MINSA) e representa as zonas de monitorização epidemiológica do país. Use a aba <strong>Mapa Interactivo</strong> para analisar métricas em tempo real, filtrar por municípios e visualizar marcadores ativos por província.
+                </p>
               </div>
             </div>
           </motion.div>
-        ):(
+        )}
+
+        {viewMode === 'grafico' && (
           <motion.div key="grafico" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-10}} className="space-y-6">
-            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm" id="card-casos-por-provincia">
               <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
                 <Activity size={15} className="text-medic-600"/>Casos por Província e Doença
               </h3>
@@ -408,7 +395,7 @@ export function MinsaVigilanciaContent({ evaluations = [] }: MinsaVigilanciaCont
                 </ResponsiveContainer>
               </div>
             </div>
-            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm" id="card-alertas-activos">
               <h3 className="text-xs font-black text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <AlertTriangle size={15} className="text-red-500"/>Alertas Activos
               </h3>

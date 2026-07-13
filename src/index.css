@@ -504,7 +504,7 @@
    ═══════════════════════════════════════════════════════════════ */
 .app-shell {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 260px 1fr;
   min-height: 100vh;
   background: var(--color-ink-50);
 }
@@ -753,3 +753,276 @@ input:focus, select:focus, textarea:focus { outline: none; }
 
 /* Line clamp for legacy */
 .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+
+/* ──────────────────────────────────────────────────────────────
+   SISTEMA DE TEMA CLARO/ESCURO GLOBAL (DR.IA CIDADÃO)
+   ────────────────────────────────────────────────────────────── */
+
+/* Transição de cores global suave e sem flickering */
+html, body, aside, header, nav, button, input, select, textarea, table, tr, th, td, div, section, a, span {
+  transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+}
+
+/* Estilos de Tema Escuro */
+.dark {
+  /* Override das cores principais da paleta */
+  --color-ink-50: #020817;
+  --color-ink-100: #0F172A;
+  --color-ink-200: #1E293B;
+  --color-ink-300: #334155;
+  --color-ink-400: #475569;
+  --color-ink-500: #64748B;
+  --color-ink-600: #94A3B8;
+  --color-ink-700: #CBD5E1;
+  --color-ink-800: #E2E8F0;
+  --color-ink-900: #F8FAFC;
+  --color-ink-0: #0F172A;
+
+  --color-bg: #020817;
+  --color-surface: #1E293B;
+  --color-text: #F8FAFC;
+  --color-muted: #CBD5E1;
+  --color-line: #334155;
+
+  /* Redefinir as cores de estado para harmonia no escuro */
+  --color-success-50: #0c2317;
+  --color-success-100: #143e26;
+  --color-success-500: #10b981;
+  --color-success-600: #34d399;
+  
+  --color-danger-50: #291011;
+  --color-danger-100: #4a1516;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #f87171;
+
+  --color-warning-50: #24160c;
+  --color-warning-100: #3f2211;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #fbbf24;
+
+  /* Medic / Primary color scale inside dark mode */
+  --color-medic-50: #131c33;
+  --color-medic-100: #1b2a4e;
+  --color-medic-500: #3b82f6;
+  --color-medic-600: #2C5EE5;
+  --color-medic-700: #3b82f6;
+  --color-medic-800: #1e3a8a;
+  --color-medic-900: #0f172a;
+
+  /* Scrollbar */
+  --color-scrollbar-track: #111827;
+  --color-scrollbar-thumb: #334155;
+  --color-scrollbar-thumb-hover: #475569;
+}
+
+/* Sidebar Dark Theme overrides */
+.dark aside {
+  background-color: #0F172A !important;
+  border-color: #334155 !important;
+}
+
+.dark .nav-item {
+  color: #CBD5E1 !important;
+}
+
+.dark .nav-item:hover {
+  background-color: #1E293B !important;
+  color: #F8FAFC !important;
+}
+
+/* Active navigation item styling in both Light and Dark */
+.nav-item-active {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+}
+
+.nav-item-active .nav-icon {
+  color: #FFFFFF !important;
+}
+
+.dark .nav-item-active {
+  background: #2563EB !important;
+  color: #FFFFFF !important;
+}
+
+.dark .nav-item-active .nav-icon {
+  color: #FFFFFF !important;
+}
+
+/* Topbar / Header overrides */
+.dark .app-desktop-header,
+.dark .app-mobile-header {
+  background-color: rgba(17, 24, 39, 0.85) !important;
+  border-color: #334155 !important;
+}
+
+/* Pesquisar inputs and container */
+.dark .xl\:flex.items-center.gap-2 {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+}
+
+.dark .xl\:flex.items-center.gap-2 input {
+  color: #F8FAFC !important;
+}
+
+.dark .xl\:flex.items-center.gap-2 kbd {
+  background-color: #111827 !important;
+  border-color: #334155 !important;
+  color: #CBD5E1 !important;
+}
+
+/* Cards dark mode styling */
+.dark .card,
+.dark .card-hover,
+.dark .card-flat,
+.dark .card-elevated,
+.dark .card-dark,
+.dark [class*="card"] {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25) !important;
+}
+
+/* Override general bg-white inside dark mode */
+.dark .bg-white:not(button):not(span):not(a):not(img):not(.nav-item-active) {
+  background-color: #1E293B !important;
+}
+
+/* Form controls in dark mode */
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark select,
+.dark textarea {
+  background-color: #111827 !important;
+  color: #F8FAFC !important;
+  border-color: #334155 !important;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2) !important;
+}
+
+/* Secondary Button dark mode */
+.dark .btn-secondary {
+  background-color: #334155 !important;
+  border-color: #475569 !important;
+  color: #F8FAFC !important;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #475569 !important;
+}
+
+.dark .btn-primary:hover {
+  background-color: #3B82F6 !important;
+}
+
+/* Table styling in dark mode */
+.dark thead tr {
+  background-color: #1E293B !important;
+  color: #CBD5E1 !important;
+}
+
+.dark tbody tr:hover {
+  background-color: #1F2937 !important;
+}
+
+.dark tbody tr {
+  border-color: #334155 !important;
+}
+
+.dark th, .dark td {
+  border-color: #334155 !important;
+}
+
+/* Specific styling for hospital list in dark mode */
+.dark [id^="hospital-card-"] {
+  background-color: #111827 !important;
+  border-color: #334155 !important;
+}
+
+.dark a[href*="wa.me"] {
+  background-color: #16A34A !important;
+}
+
+.dark a[href*="wa.me"]:hover {
+  background-color: #15803d !important;
+}
+
+.dark a[href^="tel:"] {
+  background-color: #2563EB !important;
+}
+
+.dark a[href^="tel:"]:hover {
+  background-color: #1d4ed8 !important;
+}
+
+/* Recharts styling inside dark mode */
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: #334155 !important;
+}
+
+.dark .recharts-cartesian-axis-tick text {
+  fill: #CBD5E1 !important;
+}
+
+.dark .recharts-legend-item-text {
+  color: #CBD5E1 !important;
+}
+
+.dark .recharts-default-tooltip {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #F8FAFC !important;
+}
+
+.dark .recharts-tooltip-label {
+  color: #F8FAFC !important;
+}
+
+.dark .recharts-tooltip-item {
+  color: #CBD5E1 !important;
+}
+
+/* Webkit Scrollbars in dark mode */
+.dark ::-webkit-scrollbar-track {
+  background: #111827 !important;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155 !important;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569 !important;
+}
+
+/* slideshow/hero banner in dark mode */
+.dark section.relative.bg-medic-900 {
+  background-color: #020817 !important;
+}
+
+.dark section.relative.bg-medic-900 .bg-gradient-to-t {
+  background-image: linear-gradient(to top, rgba(2, 8, 23, 0.9) 0%, rgba(2, 8, 23, 0.3) 50%, transparent 100%) !important;
+}
+
+.dark section.relative.bg-medic-900 .bg-gradient-to-r {
+  background-image: linear-gradient(to right, rgba(2, 8, 23, 0.6) 0%, transparent 100%) !important;
+}
+
+/* Modals */
+.dark div[role="dialog"] {
+  background-color: #1E293B !important;
+  border-color: #334155 !important;
+  color: #F8FAFC !important;
+}
+

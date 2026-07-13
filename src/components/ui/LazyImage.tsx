@@ -91,7 +91,7 @@ export const LazyImage = memo(function LazyImage({
     overflow: 'hidden',
     width: width || '100%',
     height: height || 'auto',
-    backgroundColor: '#f1f5f9',
+    backgroundColor: isLoaded ? 'transparent' : '#f1f5f9',
     ...style,
   };
 

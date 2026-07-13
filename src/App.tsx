@@ -42,7 +42,7 @@ import { MOCK_HOSPITALS, INITIAL_EVALUATIONS } from './constants/driaMocks';
 
 // UI Components
 import { LazyImage } from './components/ui/LazyImage';
-const logoDria = 'https://i.postimg.cc/SRDnL33R/Logomarca-1.jpg';
+const logoDria = 'https://i.postimg.cc/s1dqtGfG/1.png';
 
 // Constants & Types
 import { 
@@ -741,6 +741,7 @@ export default function App() {
     return (saved === 'dark' || saved === 'light') ? saved : 'light';
   });
 
+  // When theme changes, update document class, localStorage, and user profile fields
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'dark') {
@@ -749,7 +750,17 @@ export default function App() {
       root.classList.remove('dark');
     }
     localStorage.setItem('dria_theme', theme);
-  }, [theme]);
+    if (user && user.theme !== theme) {
+      updateUserFields({ theme });
+    }
+  }, [theme, user, updateUserFields]);
+
+  // Sync theme with user's stored theme on initial login/load
+  useEffect(() => {
+    if (user?.theme && user.theme !== theme) {
+      setTheme(user.theme);
+    }
+  }, [user?.theme]);
 
   useEffect(() => {
     if (stage === 'login' || stage === 'splash') {
@@ -2983,7 +2994,7 @@ Ficha clínica do titular:
         >
           <div className="flex flex-col items-center justify-center mb-8">
             <LazyImage
-              src="https://i.postimg.cc/5NK3bRyj/Logomarca-2.jpg"
+              src="https://i.postimg.cc/pdXBS7sC/2.png"
               alt="DR.IA"
               priority={true}
               placeholder="skeleton"

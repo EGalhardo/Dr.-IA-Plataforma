@@ -17,13 +17,11 @@ import { useLanguage } from '../../hooks/useLanguage';
 import { AnimatedCounter } from '../ui/AnimatedCounter';
 import { LazyImage } from '../ui/LazyImage';
 
-import { ANGOLA_MAIN_PATH, ANGOLA_CABINDA_PATH, ANGOLA_PROVINCES as PROVINCES_DATA } from '../../data/angolaMap';
 interface MinsaDashboardContentProps {
   evaluations: DriaEvaluation[];
   hospitals: DriaHospital[];
   setTab?: (tab: string) => void;
 }
-const PROVINCES = PROVINCES_DATA;
 
 const OUTBREAKS = [
   { disease: 'Cólera', location: 'Cazenga, Luanda', cases: 147, trend: '+12', level: 'Crítico', color: 'danger', icon: AlertTriangle },
@@ -33,16 +31,9 @@ const OUTBREAKS = [
   { disease: 'Ébola (vigilância)', location: 'Fronteira Norte', cases: 0, trend: '0', level: 'Monitorização', color: 'info', icon: Radio },
 ];
 
-const levelColor: Record<string, { dot: string }> = {
-  high:   { dot: 'bg-danger-500' },
-  medium: { dot: 'bg-warning-500' },
-  low:    { dot: 'bg-success-500' },
-};
-
 export function MinsaDashboardContent({ evaluations, hospitals, setTab }: MinsaDashboardContentProps) {
   const { t } = useLanguage();
   const [now, setNow] = useState(new Date());
-  const [hoveredProv, setHoveredProv] = useState<string | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
 
   const slides = GOV_HIGHLIGHT_SLIDES;
@@ -275,7 +266,7 @@ export function MinsaDashboardContent({ evaluations, hospitals, setTab }: MinsaD
       </section>
 
       <section className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 card relative overflow-hidden">
+        <div className="lg:col-span-2 card relative overflow-hidden flex flex-col">
           <div className="flex items-center justify-between mb-4">
             <div>
               <div className="eyebrow">Vigilância Epidemiológica</div>
@@ -283,59 +274,15 @@ export function MinsaDashboardContent({ evaluations, hospitals, setTab }: MinsaD
                 <Globe size={18} className="text-medic-600" /> Mapa Nacional · Actividade por Província
               </h3>
             </div>
-            <div className="flex items-center gap-3 text-xs">
-              <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-danger-500" /> Alto</span>
-              <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-warning-500" /> Médio</span>
-              <span className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-success-500" /> Baixo</span>
-            </div>
           </div>
 
-          <div className="relative aspect-[4/3] max-h-[520px] bg-gradient-to-br from-medic-50 via-white to-ink-50 rounded-xl border border-ink-100 overflow-hidden">
-            <svg viewBox="0 0 90 96" className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="angola-fill" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#bfd6ff" />
-                  <stop offset="100%" stopColor="#dbe8ff" />
-                </linearGradient>
-              </defs>
-              <path d={ANGOLA_MAIN_PATH} fill="url(#angola-fill)" stroke="#3a6df0" strokeWidth="0.4" opacity="0.8" />
-              <path d={ANGOLA_CABINDA_PATH} fill="url(#angola-fill)" stroke="#3a6df0" strokeWidth="0.4" opacity="0.8" />
-              {PROVINCES.filter(p => p.level === 'high').map((p, i) => (
-                <g key={'ring-' + p.id}>
-                  <motion.circle cx={p.x} cy={p.y} r="2" fill="none" stroke="#ef4444" strokeWidth="0.3"
-                    initial={{ r: 2, opacity: 0.8 }} animate={{ r: 6, opacity: 0 }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }} />
-                  <circle cx={p.x} cy={p.y} r="1.2" fill="#ef4444" />
-                </g>
-              ))}
-            </svg>
-            {PROVINCES.map((p, i) => {
-              const lc = levelColor[p.level];
-              return (
-                <motion.button key={p.id}
-                  initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
-                  onMouseEnter={() => setHoveredProv(p.id)} onMouseLeave={() => setHoveredProv(null)}
-                  style={{ left: p.x + '%', top: p.y + '%' }}
-                  className="absolute -translate-x-1/2 -translate-y-1/2 group focus:outline-none">
-                  <span className={'block w-3 h-3 rounded-full ' + lc.dot + ' ' + (p.level === 'high' ? 'animate-pulse' : '') + ' ring-2 ring-white shadow-md transition-transform group-hover:scale-150'} />
-                </motion.button>
-              );
-            })}
-            <AnimatePresence>
-              {hoveredProv && (() => {
-                const p = PROVINCES.find(x => x.id === hoveredProv)!;
-                return (
-                  <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                    style={{ left: p.x + '%', top: p.y + '%' }}
-                    className="absolute -translate-x-1/2 translate-y-4 bg-white rounded-xl shadow-xl border border-ink-100 p-3 z-10 min-w-[160px]">
-                    <div className="font-bold text-sm text-ink-900">{p.name}</div>
-                    <div className="text-xs text-ink-500 mt-0.5">População: {p.pop}</div>
-                  </motion.div>
-                );
-              })()}
-            </AnimatePresence>
-            <div className="absolute bottom-3 left-3 flex items-center gap-2 text-[11px] text-ink-500 bg-white/80 backdrop-blur-sm rounded-lg px-2 py-1 border border-ink-100">
-              <Eye size={12} /> Passe o rato sobre as províncias
-            </div>
+          <div className="relative aspect-[4/3] max-h-[520px] bg-white rounded-xl border border-ink-100 overflow-hidden flex items-center justify-center p-3">
+            <img
+              src="https://i.postimg.cc/ht4Z2ywt/2.png"
+              alt="Mapa Nacional · Actividade por Província"
+              referrerPolicy="no-referrer"
+              className="max-h-full max-w-full object-contain rounded-lg shadow-sm border border-slate-50"
+            />
           </div>
         </div>
 

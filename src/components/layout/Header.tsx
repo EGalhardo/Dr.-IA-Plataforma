@@ -191,16 +191,19 @@ export function Header({
       {/* ═══ Mobile AppBar ═══ */}
       <header
         style={{ top: hasEmergencyBanner ? 32 : 0 }}
-        className="lg:hidden fixed left-0 right-0 h-16 bg-white/90 backdrop-blur-xl border-b border-ink-100 px-4 flex items-center justify-between z-40"
+        className="app-mobile-header lg:hidden fixed left-0 right-0 h-16 bg-white/90 backdrop-blur-xl border-b border-ink-100 px-4 flex items-center justify-between z-40"
       >
         <div className="flex items-center gap-2">
           <button onClick={onOpenMobileSidebar} className="btn-icon -ml-2" aria-label="Abrir menu">
             <Menu size={20} />
           </button>
-          <div className="flex items-center gap-2" onClick={() => setTab(isAdmin ? 'minsa-dashboard' : 'home')}>
-            <div className="ia-orb w-8 h-8">
-              <Activity size={16} strokeWidth={2.4} />
-            </div>
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setTab(isAdmin ? 'minsa-dashboard' : 'home')}>
+            <img 
+              src="https://i.postimg.cc/pdXBS7sC/2.png" 
+              alt="Dr.IA Logo" 
+              referrerPolicy="no-referrer"
+              className="w-8 h-8 object-contain rounded-lg"
+            />
             <span className="text-base font-extrabold tracking-tight text-ink-900">
               Dr<span className="text-medic-600">.</span>IA
             </span>
@@ -266,7 +269,7 @@ export function Header({
       {/* ═══ Desktop Topbar ═══ */}
       <div
         style={{ top: hasEmergencyBanner ? 32 : 0 }}
-        className="hidden lg:flex sticky z-30 bg-white/85 backdrop-blur-xl border-b border-ink-100 px-6 py-3 items-center gap-4"
+        className="app-desktop-header hidden lg:flex sticky z-30 bg-white/85 backdrop-blur-xl border-b border-ink-100 px-6 py-3 items-center gap-4"
       >
         {/* Greeting / breadcrumb */}
         <div className="flex-1 min-w-0">

@@ -461,7 +461,7 @@ export function MinsaHospitaisContent({ hospitals = [], evaluations = [], onTogg
           
           <button
             onClick={handleOpenRegister}
-            className="flex-1 md:flex-initial px-5 py-3 bg-[#0b1b3d] hover:bg-[#132c5e] text-white font-black text-xs uppercase tracking-wider rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-900/10 cursor-pointer"
+            className="flex-1 md:flex-initial px-5 py-3 bg-[#2C5EE5] hover:bg-[#1f4bce] text-white font-black text-xs uppercase tracking-wider rounded-full flex items-center justify-center gap-2 transition-all shadow-md shadow-slate-900/10 cursor-pointer"
           >
             <Plus className="w-4.5 h-4.5" />
             Registar Instituição
@@ -626,7 +626,7 @@ export function MinsaHospitaisContent({ hospitals = [], evaluations = [], onTogg
                 onClick={() => setStatusFilter(mode)}
                 className={`px-4 py-2 font-black text-[9px] uppercase tracking-wider rounded-lg transition-all cursor-pointer ${
                   statusFilter === mode
-                    ? 'bg-[#0b1b3d] text-white shadow-sm'
+                    ? 'bg-[#2C5EE5] text-white shadow-sm'
                     : 'bg-white border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-50'
                 }`}
               >
@@ -645,7 +645,7 @@ export function MinsaHospitaisContent({ hospitals = [], evaluations = [], onTogg
             
             {/* Dark Navy Table Header */}
             <thead>
-              <tr className="bg-[#0b1b3d] text-white text-[10px] font-black uppercase tracking-wider">
+              <tr className="bg-[#2C5EE5] text-white text-[10px] font-black uppercase tracking-wider">
                 <th className="py-4 px-5">Instituição</th>
                 <th className="py-4 px-5">Localização</th>
                 <th className="py-4 px-5">Responsável</th>
@@ -857,7 +857,7 @@ export function MinsaHospitaisContent({ hospitals = [], evaluations = [], onTogg
               exit={{ opacity: 0, scale: 0.95 }}
               className="bg-white rounded-[32px] border border-slate-200/80 shadow-2xl max-w-lg w-full overflow-hidden"
             >
-              <div className="bg-[#0b1b3d] text-white p-5 flex justify-between items-center">
+              <div className="bg-[#2C5EE5] text-white p-5 flex justify-between items-center">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white">
                     <Building2 className="w-5 h-5" />
@@ -1058,7 +1058,7 @@ export function MinsaHospitaisContent({ hospitals = [], evaluations = [], onTogg
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-3 bg-[#0b1b3d] text-white font-black text-xs uppercase tracking-wider rounded-xl hover:bg-[#132c5e] transition-colors cursor-pointer shadow-md shadow-indigo-900/10"
+                    className="flex-1 py-3 bg-[#2C5EE5] text-white font-black text-xs uppercase tracking-wider rounded-xl hover:bg-[#1f4bce] transition-colors cursor-pointer shadow-md shadow-indigo-900/10"
                   >
                     Gravar Alterações
                   </button>
@@ -1080,7 +1080,7 @@ export function MinsaHospitaisContent({ hospitals = [], evaluations = [], onTogg
               exit={{ opacity: 0, scale: 0.95 }}
               className="bg-white rounded-[32px] border border-slate-200/80 shadow-2xl max-w-xl w-full overflow-hidden"
             >
-              <div className="bg-[#0b1b3d] text-white p-5 flex justify-between items-center">
+              <div className="bg-[#2C5EE5] text-white p-5 flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-black text-xs text-white uppercase shrink-0">
                     {showDossierModal.sigla}

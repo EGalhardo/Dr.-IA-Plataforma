@@ -204,7 +204,7 @@ export function TrabalhadoresMinsaContent() {
         {/* Adicionar Trabalhador Button exactly like image 2 */}
         <button
           onClick={handleOpenAddModal}
-          className="bg-[#0c2340] hover:bg-slate-800 text-white rounded-2xl px-5 py-3 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 cursor-pointer shadow-md shadow-indigo-900/10 active:scale-[0.98] transition-all shrink-0 self-start md:self-center border-none"
+          className="bg-[#2C5EE5] hover:bg-[#1D4ED8] text-white rounded-2xl px-5 py-3 font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2.5 cursor-pointer shadow-md shadow-indigo-900/10 active:scale-[0.98] transition-all shrink-0 self-start md:self-center border-none"
         >
           <Plus size={16} strokeWidth={2.5} />
           Adicionar Trabalhador
@@ -260,7 +260,7 @@ export function TrabalhadoresMinsaContent() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[900px] border-collapse text-left">
             <thead>
-              <tr className="bg-[#0c2340] text-white text-[10px] font-black uppercase tracking-widest">
+              <tr className="bg-[#2C5EE5] text-white text-[10px] font-black uppercase tracking-widest">
                 <th className="py-4.5 px-6 rounded-tl-[16px]">Colaborador / Trabalhador</th>
                 <th className="py-4.5 px-6">E-mail / Contacto</th>
                 <th className="py-4.5 px-6">Telefone</th>
@@ -597,7 +597,7 @@ export function TrabalhadoresMinsaContent() {
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-3.5 bg-[#0c2340] hover:bg-slate-800 rounded-full text-white font-bold text-xs uppercase flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
+                    className="flex-1 py-3.5 bg-[#2C5EE5] hover:bg-[#1D4ED8] rounded-full text-white font-bold text-xs uppercase flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"
                   >
                     <Check size={15} className="stroke-[2.5]" />
                     <span>SUBMETER CADASTRO</span>

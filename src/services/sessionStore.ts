@@ -46,6 +46,7 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
       verificationLevel: candidate?.verificationLevel || CANONICAL_USER.verificationLevel,
       confidenceScore: candidate?.confidenceScore || CANONICAL_USER.confidenceScore,
       lastAccess: candidate?.lastAccess || CANONICAL_USER.lastAccess,
+      theme: candidate?.theme || "light",
     };
   };
 

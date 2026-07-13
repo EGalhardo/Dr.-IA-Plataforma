@@ -319,7 +319,14 @@ export function AIChatAssistant({
     }
 
     // Filter out asterisks and markdown formatting symbols so the speech synthesis engine doesn't verbalize stars/asterisks
-    const cleanText = text.replace(/\*/g, '').trim();
+    let cleanText = text.replace(/\*/g, '').trim();
+
+    // Replace the word "Doctor" with "Doutor" so it is read as "Doutor" while written as "Doctor"
+    cleanText = cleanText
+      .replace(/\bDoctor\b/g, 'Doutor')
+      .replace(/\bdoctor\b/g, 'doutor')
+      .replace(/\bDoctors\b/g, 'Doutores')
+      .replace(/\bdoctors\b/g, 'doutores');
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'pt-AO';

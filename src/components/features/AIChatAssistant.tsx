@@ -273,12 +273,7 @@ export function AIChatAssistant({
 
         const timer = setTimeout(() => {
           if (currentLanguage === 'pt') {
-            speak(pageText, () => {
-              // Automatically deactivate microphone upon finishing presentation
-              if (stopIaVoice) {
-                stopIaVoice();
-              }
-            });
+            speak(pageText);
           }
         }, 300);
         return () => clearTimeout(timer);
@@ -290,10 +285,10 @@ export function AIChatAssistant({
         setMessages(prev => {
           // If there's only the default initial message, replace or pre-populate it.
           if (prev.length === 1 && prev[0].role === 'assistant') {
-            return [{ role: 'assistant', content: welcomeText }];
+            return [{ role: 'assistant', content: fullWelcomeText }];
           }
-          if (prev[prev.length - 1]?.content !== welcomeText) {
-            return [...prev, { role: 'assistant', content: welcomeText }];
+          if (prev[prev.length - 1]?.content !== fullWelcomeText) {
+            return [...prev, { role: 'assistant', content: fullWelcomeText }];
           }
           return prev;
         });

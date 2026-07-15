@@ -204,6 +204,22 @@ export function AIChatAssistant({
     return isAdmin ? item.admin : isInst ? item.inst : item.welcome;
   };
 
+  const getVoiceWelcomeMessage = (lang: string) => {
+    const key = lang as keyof typeof WELCOME_MESSAGES;
+    const item = WELCOME_MESSAGES[key] || WELCOME_MESSAGES.pt;
+    if (isAdmin) return "Saudações. Sou a Assistente Virtual do Dr.IA no Ministério da Saúde. Em que posso ser útil na gestão do SOC hoje?";
+    if (isInst) return "Olá, Doutor(a). Sou a Assistente Virtual do Dr.IA no Hospital. Como posso ajudar na gestão da triagem e dos pacientes hoje?";
+    return "Bem-vindo ao Dr. IA! Sou a sua Assistente Virtual. Estou disponível para ajudá-lo a navegar pela plataforma, esclarecer dúvidas e encaminhá-lo para as funcionalidades pretendidas. Em que posso ajudar?";
+  };
+
+  const getVoiceFollowUpMessage = (lang: string) => {
+    const key = lang as keyof typeof WELCOME_MESSAGES;
+    const item = WELCOME_MESSAGES[key] || WELCOME_MESSAGES.pt;
+    if (isAdmin) return "Pretende visualizar os indicadores epidemiológicos nacionais, gerir a rede hospitalar ou aceder aos relatórios de vigilância?";
+    if (isInst) return "Pretende aceder à fila de triagem, gerir os pacientes em tempo real ou consultar o histórico clínico do hospital?";
+    return "Pretende conhecer as funcionalidades da plataforma ou necessita de ajuda com alguma tarefa específica?";
+  };
+
   const [messages, setMessages] = useState<Message[]>(() => {
     return [{ role: 'assistant', content: getGreetingText(currentLanguage) }];
   });
@@ -243,7 +259,9 @@ export function AIChatAssistant({
 
       if (pageText) {
         setMessages(prev => {
-          const welcomeText = getGreetingText(currentLanguage);
+          const welcomeText = getVoiceWelcomeMessage(currentLanguage);
+        const followUpText = getVoiceFollowUpMessage(currentLanguage);
+        const fullWelcomeText = `${welcomeText} ${followUpText}`;
           if (prev.length <= 1 && (prev.length === 0 || prev[0].content === welcomeText)) {
             return [{ role: 'assistant', content: pageText }];
           }
@@ -265,7 +283,9 @@ export function AIChatAssistant({
         }, 300);
         return () => clearTimeout(timer);
       } else {
-        const welcomeText = getGreetingText(currentLanguage);
+        const welcomeText = getVoiceWelcomeMessage(currentLanguage);
+        const followUpText = getVoiceFollowUpMessage(currentLanguage);
+        const fullWelcomeText = `${welcomeText} ${followUpText}`;
         
         setMessages(prev => {
           // If there's only the default initial message, replace or pre-populate it.
@@ -281,7 +301,7 @@ export function AIChatAssistant({
         // Small delay to allow audio synthesis engine stability, then speak welcome message out loud
         const timer = setTimeout(() => {
           if (currentLanguage === 'pt') {
-            speak(welcomeText);
+            speak(fullWelcomeText);
           }
         }, 300);
         return () => clearTimeout(timer);

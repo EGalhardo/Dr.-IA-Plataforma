@@ -2666,6 +2666,8 @@ Ficha clínica do titular:
             }}
             currentLanguage={currentLanguage}
             evaluations={citizenEvaluations}
+            searchMail={searchMail}
+            setSearchMail={setSearchMail}
           />
         );
       case 'perfil':

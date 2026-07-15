@@ -6,7 +6,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Bot, Activity, Clock, Hospital, MapPin, Phone, MessageSquare, AlertCircle, ShieldCheck, ChevronRight, Heart, Stethoscope } from 'lucide-react';
+import { Bot, Activity, Clock, Hospital, MapPin, Phone, MessageSquare, AlertCircle, ShieldCheck, ChevronRight, Heart, Stethoscope, Search } from 'lucide-react';
 import { HIGHLIGHT_SLIDES } from '../../constants/data';
 import { Message, LanguageCode } from '../../types';
 import { DriaEvaluation } from '../../types/dria';
@@ -224,7 +224,7 @@ const HOSPITAL_DATABASE = [
   }
 ];
 
-export function HomeContent({ activeSlide, setActiveSlide, isMobile, setTab, unreadTotal, inbox, sentMessages, handleSelectMessage, onCreateRequest, isInst, onDoubleClickInstitution, currentLanguage, evaluations = [] }: HomeContentProps) {
+export function HomeContent({ activeSlide, setActiveSlide, isMobile, setTab, unreadTotal, inbox, sentMessages, handleSelectMessage, onCreateRequest, isInst, onDoubleClickInstitution, currentLanguage, evaluations = [], searchMail, setSearchMail }: HomeContentProps & { searchMail: string; setSearchMail: (v: string) => void }) {
   const { t } = useLanguage();
   const slides = HIGHLIGHT_SLIDES;
   const currentSlide = slides[activeSlide % slides.length];

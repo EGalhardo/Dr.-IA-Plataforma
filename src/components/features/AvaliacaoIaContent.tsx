@@ -3,12 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Bot, Send, User, Calendar, Scale, Ruler, AlertTriangle, ShieldCheck, CheckCircle2, ChevronRight, Upload, Paperclip, Activity, FileText, ArrowLeft, Hospital, RefreshCw, Sparkles, AlertCircle, Mic } from 'lucide-react';
+import { Bot, Send, User, Calendar, Scale, Ruler, AlertTriangle, ShieldCheck, CheckCircle2, ChevronRight, Upload, Paperclip, Activity, FileText, ArrowLeft, Hospital, RefreshCw, Sparkles, AlertCircle, Mic, Mic2, Volume2, VolumeX, X, Loader2 } from 'lucide-react';
 import { DriaEvaluation, DriaHospital } from '../../types/dria';
 import { MOCK_HOSPITALS } from '../../constants/driaMocks';
 import { useLanguage } from '../../hooks/useLanguage';
+import { supabaseService, hasValidSupabaseKeys } from '../../services/supabaseService';
 
 interface AvaliacaoIaContentProps {
   onAddTriage: (triage: DriaEvaluation) => void;
@@ -71,6 +72,117 @@ export function AvaliacaoIaContent({
   const [isSendingToHospital, setIsSendingToHospital] = useState(false);
   const [sentHospitalName, setSentHospitalName] = useState<string | null>(null);
   const [selectedHospitalId, setSelectedHospitalId] = useState<string>('h1');
+
+  // Voice Recording States
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(0);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
+
+  const startVoiceRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      const audioContext = new AudioContext();
+      audioContextRef.current = audioContext;
+      
+      const analyser = audioContext.createAnalyser();
+      analyser.fftSize = 256;
+      analyserRef.current = analyser;
+      
+      const source = audioContext.createMediaStreamSource(stream);
+      source.connect(analyser);
+      
+      const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus' });
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+      
+      mediaRecorder.onstop = () => {
+        transcribeAudio();
+        stream.getTracks().forEach(track => track.stop());
+        if (audioContextRef.current) {
+          audioContextRef.current.close();
+          audioContextRef.current = null;
+        }
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+      };
+      
+      mediaRecorder.start(100);
+      setIsRecording(true);
+      
+      const updateAudioLevel = () => {
+        if (analyserRef.current && isRecording) {
+          const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+          analyserRef.current.getByteFrequencyData(dataArray);
+          const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+          setAudioLevel(Math.min(average / 128, 1));
+          animationFrameRef.current = requestAnimationFrame(updateAudioLevel);
+        }
+      };
+      updateAudioLevel();
+      
+    } catch (error) {
+      console.error('Erro ao iniciar gravação:', error);
+      alert('Não foi possível acessar o microfone. Verifique as permissões do navegador.');
+    }
+  };
+
+  const stopVoiceRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const transcribeAudio = async () => {
+    if (audioChunksRef.current.length === 0) return;
+    
+    const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'audio.webm');
+    formData.append('model', 'whisper-large-v3');
+    formData.append('language', 'pt');
+    
+    try {
+      const response = await fetch('/api/transcribe', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const data = await response.json();
+      
+      if (data.text) {
+        setInputText(data.text);
+        handleSendMessage();
+      } else if (data.error) {
+        console.error('Erro na transcrição:', data.error);
+        alert('Erro na transcrição: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Erro ao transcrever áudio:', error);
+      alert('Erro ao conectar com o serviço de transcrição.');
+    }
+  };
+
+  const handleVoiceToggle = () => {
+    if (isRecording) {
+      stopVoiceRecording();
+    } else {
+      startVoiceRecording();
+    }
+  };
 
   const handleStartChat = (e: React.FormEvent) => {
     e.preventDefault();
@@ -528,14 +640,33 @@ export function AvaliacaoIaContent({
 
                 <button
                   type="button"
-                  onClick={() => {
-                    setInputText("Sinto dor de cabeça constante, cansaço acumulado e calafrios há 2 dias.");
-                  }}
-                  className="w-10 h-10 rounded-xl bg-[#00D254] text-white hover:bg-[#00B849] active:scale-95 flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-sm"
-                  title="Falar"
+                  onClick={handleVoiceToggle}
+                  disabled={isRecording && audioChunksRef.current.length === 0}
+                  className={`w-10 h-10 rounded-xl transition-all cursor-pointer shrink-0 shadow-sm flex items-center justify-center ${
+                    isRecording 
+                      ? 'bg-red-500 text-white animate-pulse' 
+                      : 'bg-[#00D254] text-white hover:bg-[#00B849] active:scale-95'
+                  }`}
+                  title={isRecording ? "Parar gravação" : "Iniciar gravação de voz"}
                 >
-                  <Mic size={16} />
+                  {isRecording ? <Mic2 size={16} /> : <Mic size={16} />}
                 </button>
+
+                {isRecording && (
+                  <div className="flex items-center gap-1.5 px-2 py-1 bg-red-50 border border-red-100 rounded-lg text-red-700">
+                    <div className="flex items-end gap-0.5 h-5">
+                      {[1,2,3,4,5].map((i) => (
+                        <motion.div
+                          key={i}
+                          animate={{ height: [`${Math.max(10, audioLevel * 100 * (0.3 + i * 0.15))}%`, `${Math.max(10, audioLevel * 100 * (0.5 + i * 0.1))}%`] }}
+                          transition={{ duration: 0.15, repeat: Infinity, ease: "easeInOut" }}
+                          className="w-1 rounded-full bg-red-500"
+                        />
+                      ))}
+                    </div>
+                    <span className="text-[10px] font-bold">Gravando...</span>
+                  </div>
+                )}
 
                 <button
                   type="button"

@@ -335,7 +335,7 @@ export function AIChatAssistant({
 
     // Filter out asterisks and markdown formatting symbols so the speech synthesis engine doesn't verbalize stars/asterisks
     // Append standard closing phrase to every AI response
-    const closingPhrase = " Apresentação terminada. Precisa de alguma ajuda com as funcionalidades desta página?";
+    const closingPhrase = " Precisa de alguma ajuda com as funcionalidades desta página?";
     let cleanText = (text + closingPhrase).replace(/\*/g, '').trim();
 
     // Replace the word "Doctor" with "Doutor" so it is read as "Doutor" while written as "Doctor"

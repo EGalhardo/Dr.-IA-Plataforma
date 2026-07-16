@@ -897,7 +897,7 @@ REGRAS DE RESPOSTA:
               key="result-report"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="space-y-4 text-left max-w-3xl mx-auto w-full py-0.5"
+              className="space-y-4 text-left w-full py-0.5 px-3 md:px-4"
             >
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 bg-slate-50 border border-slate-100 rounded-xl p-3">
                 <div className="flex items-center gap-2">

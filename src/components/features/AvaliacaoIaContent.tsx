@@ -59,7 +59,7 @@ export function AvaliacaoIaContent({
   // Chat States
   const INITIAL_CHAT_MESSAGE = {
     sender: 'ai' as const,
-    text: `Olá! Eu sou Dr.IA. Seja bem-vindo(a).\nEstou aqui para ouvir você e ajudar a avaliar seus sintomas por meio de algumas perguntas simples.\nO que está sentindo hoje?`,
+    text: `Bom dia! Seja bem-vindo ao Dr.IA, uma plataforma de Saúde. Em que posso ser útil?`,
     time: new Date().toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' })
   };
   const [messages, setMessages] = useState<Array<{ sender: 'ai' | 'user'; text: string; time: string }>>([INITIAL_CHAT_MESSAGE]);
@@ -236,8 +236,8 @@ export function AvaliacaoIaContent({
         };
         setMessages(prev => [...prev, aiMsg]);
 
-        // After 2 user messages, trigger triage analysis
-        if (userMessageCount >= 1) {
+        // After 3 user messages, trigger triage analysis (allows proper conversation)
+        if (userMessageCount >= 3) {
           setTimeout(() => {
             triggerAnalysis(userMsgText);
           }, 1500);

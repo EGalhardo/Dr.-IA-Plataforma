@@ -5,7 +5,7 @@
  * Dr.IA — Premium Header (Medical Design System v2)
  */
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Mic, Globe, ChevronDown, Check, Sun, Moon, Search, Bell, Menu,
@@ -16,6 +16,7 @@ import { AppNotification, AppMode, LanguageCode, LANGUAGE_OPTIONS } from '../../
 import { useLanguage } from '../../hooks/useLanguage';
 import { LazyImage } from '../ui/LazyImage';
 import { hasPagePresentation } from '../../services/voicePresentations';
+import { useTranslationContext } from '../../context/TranslationContext';
 import type { JSX } from 'react';
 
 interface HeaderProps {
@@ -47,10 +48,11 @@ interface HeaderProps {
    Language Selector
    ────────────────────────────────────────────────────────────── */
 function LanguageSelectorDropdown({
-  currentLanguage, setCurrentLanguage, variant = 'default'
+  currentLanguage, setCurrentLanguage, onLanguageChange, variant = 'default'
 }: {
   currentLanguage: LanguageCode;
   setCurrentLanguage: (lang: LanguageCode) => void;
+  onLanguageChange: () => void;
   variant?: 'default' | 'compact';
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +66,12 @@ function LanguageSelectorDropdown({
   }, []);
 
   const activeOption = LANGUAGE_OPTIONS.find(opt => opt.code === currentLanguage) || LANGUAGE_OPTIONS[0];
+
+  const handleLanguageChange = useCallback((lang: LanguageCode) => {
+    setCurrentLanguage(lang);
+    setIsOpen(false);
+    onLanguageChange();
+  }, [setCurrentLanguage, onLanguageChange]);
 
   return (
     <div className="relative shrink-0 flex items-center" ref={dropdownRef}>
@@ -93,7 +101,7 @@ function LanguageSelectorDropdown({
                   <button
                     key={option.code}
                     type="button"
-                    onClick={() => { setCurrentLanguage(option.code); setIsOpen(false); }}
+                    onClick={() => handleLanguageChange(option.code)}
                     className={`w-full flex items-center justify-between px-3 py-2 text-left rounded-lg text-sm transition-colors ${
                       isSelected ? 'bg-medic-50 text-medic-700 font-semibold' : 'text-ink-700 hover:bg-ink-50'
                     }`}
@@ -132,6 +140,7 @@ export function Header({
 }: HeaderProps) {
   const { user, activeProfile } = useSession();
   const { t: translate } = useLanguage();
+  const { refresh: refreshTranslations } = useTranslationContext();
   const isAdmin = appMode === 'admin';
   const isInst = appMode === 'institution';
   const hasEmergencyBanner = emergencyMode && appMode !== 'user';
@@ -211,7 +220,7 @@ export function Header({
         </div>
 
         <div className="flex items-center gap-1">
-          <LanguageSelectorDropdown currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} variant="compact" />
+          <LanguageSelectorDropdown currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} onLanguageChange={refreshTranslations} variant="compact" />
 
           <button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
@@ -318,7 +327,7 @@ export function Header({
             )}
           </button>
 
-          <LanguageSelectorDropdown currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} />
+          <LanguageSelectorDropdown currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} onLanguageChange={refreshTranslations} />
 
           <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} className="btn-icon" aria-label="Tema">
             <AnimatePresence mode="wait">

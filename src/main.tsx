@@ -5,13 +5,16 @@ import './index.css';
 import {SessionProvider} from './services/sessionStore.ts';
 import {InstitutionProvider} from './services/institutionStore.ts';
 import {LanguageProvider} from './context/language/LanguageContext.tsx';
+import {TranslationProvider} from './context/TranslationContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <SessionProvider>
       <InstitutionProvider>
         <LanguageProvider>
-          <App />
+          <TranslationProvider>
+            <App />
+          </TranslationProvider>
         </LanguageProvider>
       </InstitutionProvider>
     </SessionProvider>

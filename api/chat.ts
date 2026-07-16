@@ -56,47 +56,188 @@ function getGroq(): Groq | null {
   return groq;
 }
 
-const DRIA_PROJECT_INFO = `
-O Dr.IA é uma plataforma inteligente de saúde digital concebida para aproximar os cidadãos angolanos dos serviços de saúde através da Inteligência Artificial. O sistema funciona como um ecossistema integrado onde três painéis trabalham em conjunto: Cidadãos, Hospitais e Ministério da Saúde (MINSA).
+const DRIA_PROJECT_INFO = `**Funcionamento da Plataforma Dr.IA**
 
-O principal problema que resolvemos é a dificuldade de acesso a cuidados de saúde primários e a sobrelotação das urgências hospitalares em Angola. Muitos cidadãos deslocam-se aos hospitais sem necessidade real, enquanto casos verdadeiramente urgentes enfrentam atrasos.
+**Uma Plataforma Inteligente para Transformar o Sistema de Saúde**
 
-A solução que oferecemos é uma plataforma de triagem clínica inteligente que permite:
-- A qualquer cidadão obter uma avaliação preliminar de saúde por IA, via texto ou voz, 24h por dia
-- Aos hospitais receber relatórios clínicos antecipados antes da chegada dos pacientes
-- Ao MINSA monitorizar indicadores epidemiológicos nacionais em tempo real
+O **Dr.IA** é uma plataforma digital de saúde baseada em Inteligência Artificial desenvolvida para aproximar os cidadãos dos serviços de saúde, melhorar a eficiência dos hospitais e fornecer às autoridades sanitárias informação estratégica em tempo real para a tomada de decisões.
 
-Os três painéis do Dr.IA funcionam da seguinte forma:
+A plataforma foi concebida para responder a um dos maiores desafios enfrentados pelos sistemas de saúde, especialmente em países em desenvolvimento: o acesso limitado aos cuidados médicos, a sobrelotação das unidades hospitalares, a escassez de profissionais de saúde e a dificuldade na monitorização epidemiológica.
 
-1. PAINEL DO CIDADÃO:
-- Entrevista clínica guiada por IA com perguntas sobre sintomas, febre, temperatura, dores, vómitos, hemorragias, contacto com Ébola, doenças crónicas e medicação
-- Triagem inteligente baseada no Protocolo de Manchester
-- Classificação de prioridade: Emergência, Muito Urgente, Urgente, Moderado, Leve
-- Recomendações personalizadas (primeiros socorros, hidratação, repouso, isolamento)
-- Encaminhamento automático para hospitais em casos graves
-- Histórico médico digital completo
-- Acesso a primeiros socorros e contactos de hospitais
+O funcionamento do Dr.IA assenta num ecossistema integrado composto por três painéis principais:
 
-2. PAINEL DO HOSPITAL:
-- Dashboard com KPIs de admissões, urgências, fila de espera e altas
-- Lista de pacientes em tempo real com prioridades
-- Relatório clínico antecipado gerado por IA antes da chegada do paciente
-- Posto médico para confirmação de diagnóstico, exames e prescrição de alta
-- Alertas automáticos para casos críticos com encaminhamento do cidadão
-- Gestão de conta hospitalar e perfil
+- Painel do Cidadão;
+- Painel Hospitalar;
+- Painel do Ministério da Saúde.
 
-3. PAINEL DO MINSA (MINISTÉRIO DA SAÚDE):
-- Vigilância epidemiológica nacional com mapeamento interativo de Angola
-- Monitorização de doenças: Malária, Cólera, Tuberculose, Sarampo, Ébola
-- KPIs de casos totais, municípios em alerta, tendências semanais
-- Alertas ativos de saúde pública
-- Gestão de hospitais integrados e capacidade instalada
-- Relatórios e estatísticas para apoio à decisão estratégica
+Estes três módulos comunicam continuamente entre si, permitindo que a informação recolhida junto dos cidadãos seja transformada em apoio clínico para os hospitais e em inteligência estratégica para as autoridades de saúde.
 
-O Dr.IA integra os três painéis num ecossistema contínuo: o cidadão faz a triagem, casos graves geram alertas automáticos no hospital, e os dados agregados alimentam a vigilância do MINSA.
+**Painel do Cidadão**
 
-O nosso objetivo é um sistema de saúde mais eficiente, preventivo, inteligente e centrado no utente angolano.
-`;
+O Painel do Cidadão representa o primeiro ponto de contacto entre a população e o sistema de saúde digital.
+
+Através de um computador, tablet ou smartphone, qualquer cidadão pode iniciar uma consulta preliminar com a Inteligência Artificial, disponível 24 horas por dia, sete dias por semana.
+
+Durante esta interacção, a IA conduz uma entrevista clínica semelhante à realizada por um profissional de saúde, recolhendo informações como:
+
+- sintomas apresentados;
+- duração dos sintomas;
+- idade;
+- sexo;
+- doenças pré-existentes;
+- medicamentos utilizados;
+- histórico clínico;
+- factores de risco;
+- contactos recentes;
+- viagens realizadas;
+- sinais vitais informados pelo utilizador.
+
+A plataforma adapta automaticamente as perguntas às respostas anteriores, permitindo uma investigação clínica dinâmica e personalizada.
+
+Após concluir a entrevista, o sistema executa uma triagem inteligente baseada em algoritmos de Inteligência Artificial treinados para reconhecer padrões clínicos compatíveis com centenas de doenças e condições médicas.
+
+O cidadão recebe uma avaliação preliminar, acompanhada de recomendações claras sobre os cuidados a adoptar.
+
+Dependendo da gravidade identificada, a plataforma pode recomendar:
+
+- cuidados domiciliários;
+- observação dos sintomas;
+- realização de exames;
+- consulta médica;
+- deslocação urgente ao hospital.
+
+Nos casos considerados críticos, o sistema gera automaticamente um relatório clínico digital e encaminha antecipadamente a informação para a unidade hospitalar mais adequada.
+
+Todo o histórico permanece armazenado no perfil do utilizador, permitindo um acompanhamento contínuo da evolução do seu estado de saúde.
+
+**Painel Hospitalar**
+
+O Painel Hospitalar foi desenvolvido para permitir que as unidades de saúde iniciem o processo de atendimento antes da chegada do paciente.
+
+Sempre que um cidadão seja encaminhado pela plataforma, o hospital recebe automaticamente um relatório clínico detalhado contendo todas as informações recolhidas durante a triagem.
+
+Este relatório inclui:
+
+- sintomas;
+- histórico clínico;
+- medicamentos;
+- factores de risco;
+- prioridade clínica;
+- avaliação preliminar produzida pela IA;
+- recomendações iniciais.
+
+Com estas informações, a equipa médica pode preparar previamente:
+
+- salas de atendimento;
+- equipamentos médicos;
+- Equipamentos de Protecção Individual (EPI);
+- laboratórios;
+- especialistas;
+- medicamentos;
+- recursos humanos.
+
+A plataforma permite ainda acompanhar, em tempo real, todos os cidadãos triados na área de influência da unidade hospitalar, organizando automaticamente os pacientes segundo níveis de prioridade clínica.
+
+Esta funcionalidade reduz significativamente os tempos de espera, melhora a gestão das urgências e aumenta a eficiência operacional dos hospitais.
+
+**Painel do Ministério da Saúde**
+
+O terceiro módulo destina-se ao Ministério da Saúde e às entidades responsáveis pela gestão do Sistema Nacional de Saúde.
+
+Ao contrário dos restantes painéis, este módulo trabalha com dados agregados e anonimizados, garantindo total conformidade com os princípios de protecção da privacidade dos cidadãos.
+
+A plataforma permite monitorizar praticamente em tempo real:
+
+- evolução dos sintomas;
+- distribuição geográfica das doenças;
+- focos epidemiológicos;
+- capacidade hospitalar;
+- tempo médio de atendimento;
+- hospitais mais sobrecarregados;
+- número de triagens realizadas;
+- indicadores nacionais de saúde.
+
+Em situações de epidemias ou pandemias, como surtos de Ébola, Cólera, Dengue ou outras doenças transmissíveis, o sistema consegue identificar rapidamente padrões de propagação, apoiar a vigilância epidemiológica e fornecer informação estratégica para decisões governamentais.
+
+Além disso, disponibiliza mapas inteligentes, previsões baseadas em IA e indicadores que permitem antecipar necessidades de medicamentos, equipamentos, profissionais de saúde e infra-estruturas.
+
+**Integração Inteligente**
+
+O principal diferencial competitivo do Dr.IA reside na integração completa entre cidadãos, hospitais e autoridades sanitárias.
+
+O fluxo operacional ocorre da seguinte forma:
+
+1. O cidadão realiza a consulta inicial com a Inteligência Artificial.
+2. A IA recolhe dados clínicos e executa a triagem.
+3. Casos ligeiros recebem orientações para tratamento domiciliário.
+4. Casos moderados são encaminhados para consulta médica.
+5. Casos urgentes geram automaticamente um relatório clínico digital.
+6. O hospital recebe a informação antes da chegada do paciente e prepara o atendimento.
+7. Os dados estatísticos anonimizados alimentam o Painel do Ministério da Saúde, permitindo monitorizar a situação epidemiológica do país em tempo real.
+
+Este modelo cria um fluxo contínuo de informação entre todos os intervenientes do sistema de saúde, reduzindo tempos de resposta, aumentando a eficiência operacional e melhorando a qualidade dos cuidados prestados à população.
+
+O Dr.IA posiciona-se, assim, como uma infraestrutura nacional de saúde digital, capaz de apoiar tanto o atendimento clínico individual como a gestão estratégica da saúde pública, contribuindo para um sistema de saúde mais moderno, preventivo, inteligente e centrado no cidadão.
+
+**Vantagens da Implementação do Dr.IA**
+
+A implementação do Dr.IA representa uma transformação significativa na prestação dos cuidados de saúde, beneficiando simultaneamente os cidadãos, as unidades hospitalares e o Ministério da Saúde. Ao integrar Inteligência Artificial no processo de triagem clínica, a plataforma contribui para um sistema de saúde mais eficiente, acessível e preparado para responder aos desafios actuais e futuros.
+
+**Atendimento médico imediato**
+
+Uma das maiores vantagens do Dr.IA é permitir que qualquer cidadão tenha acesso imediato a uma consulta preliminar através da Inteligência Artificial, sem necessidade de aguardar horas ou dias por uma primeira avaliação. A plataforma está disponível 24 horas por dia, sete dias por semana, permitindo que os utentes obtenham orientação médica inicial a qualquer momento e em qualquer lugar.
+
+**Redução das filas e dos tempos de espera nos hospitais**
+
+Actualmente, milhares de cidadãos deslocam-se diariamente aos hospitais por situações que poderiam ser resolvidas com aconselhamento médico ou cuidados domiciliários. Como consequência, as urgências ficam sobrelotadas e os tempos de espera aumentam significativamente.
+
+Com o Dr.IA, muitos casos ligeiros são identificados durante a triagem e os cidadãos recebem orientações adequadas sem necessidade de se deslocarem à unidade hospitalar. Desta forma, os hospitais passam a concentrar os seus recursos nos casos verdadeiramente urgentes, reduzindo as filas e melhorando a qualidade do atendimento.
+
+**Melhor utilização dos recursos de saúde**
+
+Ao filtrar previamente os casos de menor gravidade, o Dr.IA permite uma utilização mais eficiente dos profissionais de saúde, das salas de atendimento, dos equipamentos médicos e dos medicamentos disponíveis. Isto traduz-se numa maior produtividade das unidades hospitalares e numa redução dos custos operacionais.
+
+**Maior abrangência da rede nacional de saúde**
+
+O Dr.IA permite levar serviços de saúde a cidadãos residentes em municípios e localidades onde existe escassez de médicos ou de unidades hospitalares. Basta um dispositivo com acesso à Internet para que qualquer pessoa possa beneficiar de uma avaliação clínica preliminar.
+
+Esta capacidade contribui para reduzir as desigualdades no acesso aos cuidados de saúde e aumenta significativamente a cobertura da rede nacional de saúde.
+
+**Preparação antecipada dos hospitais**
+
+Sempre que um paciente necessite de assistência hospitalar, o hospital recebe automaticamente um relatório clínico gerado pela Inteligência Artificial antes da chegada do utente.
+
+Este relatório inclui o histórico da triagem, os sintomas apresentados, os factores de risco, a prioridade clínica e as recomendações iniciais.
+
+Com esta informação, a equipa médica pode preparar previamente os recursos necessários, reduzindo o tempo entre a chegada do paciente e o início do atendimento.
+
+**Monitorização nacional da saúde em tempo real**
+
+O Ministério da Saúde passa a dispor de uma visão global e actualizada do estado de saúde da população. Os dados agregados e anonimizados permitem acompanhar, praticamente em tempo real, a evolução dos principais indicadores de saúde em todo o território nacional.
+
+Esta informação facilita a identificação precoce de surtos, epidemias e outras ameaças à saúde pública.
+
+**Identificação rápida de surtos e pandemias**
+
+O Dr.IA permite localizar rapidamente as regiões onde se verifica um aumento anormal de determinados sintomas ou doenças.
+
+Sempre que exista um possível surto de Ébola, Cólera, Dengue, Malária ou outra doença transmissível, o Ministério da Saúde poderá identificar imediatamente as zonas afectadas, acompanhar a evolução dos casos e implementar medidas preventivas de forma muito mais rápida.
+
+**Apoio à tomada de decisões estratégicas**
+
+Os dados produzidos pela plataforma constituem uma importante ferramenta de apoio ao planeamento estratégico do sistema de saúde.
+
+O Ministério poderá decidir, com base em informação fiável e em tempo real, onde reforçar profissionais, distribuir medicamentos, instalar centros de tratamento, aumentar a capacidade hospitalar ou desenvolver campanhas de prevenção.
+
+**Melhoria da qualidade dos cuidados de saúde**
+
+Ao permitir um atendimento mais rápido, uma triagem mais eficiente e uma melhor preparação das equipas médicas, o Dr.IA contribui para melhorar a qualidade dos serviços prestados aos cidadãos, reduzindo atrasos no diagnóstico e aumentando a probabilidade de um tratamento atempado.
+
+**Modernização e transformação digital do Sistema Nacional de Saúde**
+
+O Dr.IA constitui uma plataforma inovadora que impulsiona a transformação digital da saúde em Angola, promovendo a utilização da Inteligência Artificial como ferramenta de apoio aos profissionais de saúde e às entidades governamentais.
+
+A sua implementação permitirá construir um sistema de saúde mais inteligente, integrado, preventivo e centrado no cidadão, preparado para responder aos desafios do futuro.`;
 
 const DIALECT_MAP: Record<string, string> = {
   pt: 'Português de Angola',
@@ -191,7 +332,8 @@ INSTRUÇÕES CRÍTICAS PARA TRIAGEM:
 6. Responda em Português de Angola
 7. Se a resposta for longa, apresente o essencial e pergunte se deseja continuar
 8. Para sintomas graves (dor no peito, falta de ar, sangramento, febre alta, sinais neurológicos): oriente busca imediata de serviço de urgência
-9. Colete informações para triagem: idade, sexo, sintoma principal, duração, comorbidades, medicações, alergias`;
+9. Colete informações para triagem: idade, sexo, sintoma principal, duração, comorbidades, medicações, alergias
+10. SEMPRE termine sua resposta perguntando: "Tem mais alguma dúvida?"`;
 
     if (currentPage && pageContext) {
       systemPrompt += `\n\n[CONTEXTO DO ECRÃ ATUAL DO UTILIZADOR]:\nO usuário está visualizando a página "${currentPage}" no momento. \nO conteúdo e dados visíveis no ecrã dele são:\n"""${pageContext}"""\nSe o utilizador pedir para explicar o que está aberto, resumir a página, ou fizer perguntas sobre o conteúdo atual do ecrã, utilize os dados acima de forma natural para responder de maneira precisa e informativa.`;

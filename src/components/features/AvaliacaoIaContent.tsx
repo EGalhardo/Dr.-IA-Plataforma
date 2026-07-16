@@ -66,6 +66,8 @@ export function AvaliacaoIaContent({
   const [inputText, setInputText] = useState('');
   const [attachedFiles, setAttachedFiles] = useState<string[]>([]);
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userMessageCount, setUserMessageCount] = useState(0);
 
   // Result State
   const [evaluationResult, setEvaluationResult] = useState<DriaEvaluation | null>(null);
@@ -189,7 +191,7 @@ export function AvaliacaoIaContent({
     setPhase('chat');
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputText.trim() && attachedFiles.length === 0 && uploadedPhotos.length === 0) return;
 
     const userMsgText = inputText.trim() || "Anexos enviados para análise clínica.";
@@ -201,29 +203,59 @@ export function AvaliacaoIaContent({
 
     setMessages(prev => [...prev, userMsg]);
     setInputText('');
+    setUserMessageCount(prev => prev + 1);
+    setIsLoading(true);
 
-    // Simulated AI response flow to guide user triage
-    setTimeout(() => {
-      // If user has only sent 1 message, ask for more details. If more, move to triage.
-      if (messages.filter(m => m.sender === 'user').length === 0) {
-        setMessages(prev => [...prev, {
-          sender: 'ai',
-          text: 'Compreendi perfeitamente. Sente mais algum sintoma associado? Tem dores no corpo, dor de cabeça, vómitos ou falta de ar? Estas informações ajudam o sistema a classificar a prioridade clínica com precisão.',
+    try {
+      // Build message history for API
+      const apiMessages = messages.map(m => ({
+        role: m.sender === 'user' ? 'user' : 'assistant',
+        content: m.text
+      }));
+      apiMessages.push({ role: 'user', content: userMsgText });
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: apiMessages,
+          isGovMode: false,
+          currentPage: 'avaliacao-ia',
+          pageContext: `Triagem clínica do cidadão ${profileName} (BI: ${bi}, Idade: ${age}, Género: ${gender}, Município: ${municipality}). Alergias: ${allergies || 'Nenhuma'}. Doenças crónicas: ${diseases || 'Nenhuma'}. Medicação: ${medications || 'Nenhuma'}. Contacto emergência: ${emergencyContact}`,
+          language: 'pt'
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.message) {
+        const aiMsg = {
+          sender: 'ai' as const,
+          text: data.message,
           time: new Date().toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' })
-        }]);
+        };
+        setMessages(prev => [...prev, aiMsg]);
+
+        // After 2 user messages, trigger triage analysis
+        if (userMessageCount >= 1) {
+          setTimeout(() => {
+            triggerAnalysis(userMsgText);
+          }, 1500);
+        }
       } else {
-        setMessages(prev => [...prev, {
-          sender: 'ai',
-          text: 'Entendido. Estou a compilar todas as informações inseridas, o seu histórico clínico e os fatores regionais de Luanda. Por favor, aguarde uns segundos enquanto gero o seu Relatório Clínico de Triagem.',
-          time: new Date().toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' })
-        }]);
-
-        // Automatically trigger evaluation analysis
-        setTimeout(() => {
-          triggerAnalysis(userMsgText);
-        }, 1500);
+        throw new Error(data.error || 'Falha na resposta da IA');
       }
-    }, 1000);
+    } catch (error: any) {
+      console.error('Chat error:', error);
+      const errorMsg = {
+        sender: 'ai' as const,
+        text: 'Desculpe, ocorreu um erro ao processar sua solicitação. Por favor, tente novamente.',
+        time: new Date().toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const simulateAttachment = (type: 'photo' | 'doc') => {
@@ -671,9 +703,23 @@ export function AvaliacaoIaContent({
                 <button
                   type="button"
                   onClick={handleSendMessage}
-                  className="px-4 h-10 bg-[#2979FF] hover:bg-[#1A68FF] active:scale-95 text-white font-extrabold text-[10px] md:text-sm uppercase tracking-wider rounded-xl transition-all cursor-pointer shrink-0 flex items-center justify-center gap-1.5 shadow-sm"
+                  disabled={isLoading || (!inputText.trim() && attachedFiles.length === 0 && uploadedPhotos.length === 0)}
+                  className={`px-4 h-10 transition-all cursor-pointer shrink-0 flex items-center justify-center gap-1.5 shadow-sm ${
+                    isLoading || (!inputText.trim() && attachedFiles.length === 0 && uploadedPhotos.length === 0)
+                      ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                      : 'bg-[#2979FF] hover:bg-[#1A68FF] active:scale-95 text-white font-extrabold text-[10px] md:text-sm uppercase tracking-wider rounded-xl'
+                  }`}
                 >
-                  <Send size={13} /> Enviar
+                  {isLoading ? (
+                    <>
+                      <Loader2 size={13} className="animate-spin" />
+                      <span className="text-[10px]">A processar...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={13} /> Enviar
+                    </>
+                  )}
                 </button>
               </div>
             </motion.div>

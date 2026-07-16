@@ -276,75 +276,76 @@ export function AvaliacaoIaContent({
     }
   };
 
-  const triggerAnalysis = (lastInput: string) => {
+  const triggerAnalysis = async (lastInput: string) => {
     setPhase('analyzing');
 
-    setTimeout(() => {
-      // Formulate a beautiful, personalized triage based on inputs
-      const lowerText = lastInput.toLowerCase();
-      let diseaseSuspected = 'Malária por Plasmodium';
-      let priorityLevel: string = 'Urgente';
-      let specialty = 'Infectologia / Medicina Interna';
-      let recommendations = [
-        'Realizar gota espessa no hospital para confirmação laboratorial.',
-        'Tomar soro de reidratação oral em pequenas quantidades.',
-        'Controle a febre com Paracetamol se tolerado.'
-      ];
-      let causes = ['Malária', 'Dengue Crónica', 'Infeção viral aguda'];
-      let goToHosp = true;
+    try {
+      // Build full conversation for AI analysis
+      const conversationText = messages.map(m => `${m.sender === 'user' ? 'Paciente' : 'Dr.IA'}: ${m.text}`).join('\n');
+      
+      const analysisPrompt = `Como Dr.IA médico, analise esta conversa de triagem clínica e gere um diagnóstico de triagem seguindo o Protocolo de Manchester.
 
-      if (lowerText.includes('ébola') || lowerText.includes('ebola') || lowerText.includes('sangramento') || lowerText.includes('hemorragia') || lowerText.includes('sangrar')) {
-        diseaseSuspected = 'Suspeita de Doença por Vírus Ébola';
-        priorityLevel = 'Emergência';
-        specialty = 'Infectologia / Unidade de Isolamento de Biossegurança';
-        recommendations = [
-          'Isolamento imediato de forma a evitar qualquer contacto físico com outras pessoas.',
-          'Evitar a partilha de utensílios, talheres, roupas ou instalações sanitárias.',
-          'Dirigir-se de forma urgente à unidade de saúde indicada de forma segura.',
-          'A equipa hospitalar e a equipa de resposta rápida (MINSA) foram previamente notificadas.'
-        ];
-        causes = ['Doença por Vírus Ébola (Suspeito)', 'Febre de Lassa', 'Malária Grave Hemorrágica'];
-      } else if (lowerText.includes('diarreia') || lowerText.includes('vómito') || lowerText.includes('cólera')) {
-        diseaseSuspected = 'Suspeita Epidemiológica de Cólera';
-        priorityLevel = 'Urgente';
-        specialty = 'Infectologia / Gastroenterologia';
-        recommendations = [
-          'Iniciar imediatamente terapia de hidratação oral em grandes volumes.',
-          'Isolar utensílios de alimentação para prevenir infeção familiar.',
-          'Dirigir-se de forma urgente para uma Unidade de Triagem de Cólera.'
-        ];
-        causes = ['Cólera', 'Gastroenterite Bacteriana Severa', 'Salmonelose'];
-      } else if (lowerText.includes('tosse') || lowerText.includes('peito') || lowerText.includes('respirar')) {
-        diseaseSuspected = 'Suspeita de Tuberculose ou Infeção Pulmonar';
-        priorityLevel = 'Moderado';
-        specialty = 'Pneumologia / Clínica Geral';
-        recommendations = [
-          'Agendar teste de expetoração (GeneXpert) no Centro de Saúde.',
-          'Usar máscara em ambientes familiares para prevenção.',
-          'Manter boa ventilação e entrada de luz solar nos quartos.'
-        ];
-        causes = ['Tuberculose Pulmonar', 'Bronquite Aguda', 'Pneumonia Bacteriana'];
-      } else if (lowerText.includes('queimadura') || lowerText.includes('quente') || lowerText.includes('fogo')) {
-        diseaseSuspected = 'Queimadura Térmica Cutânea';
-        priorityLevel = 'Moderado';
-        specialty = 'Cirurgia Geral / Dermatologia';
-        recommendations = [
-          'Arrefecer a lesão com água corrente limpa por 15 minutos.',
-          'Não furar bolhas formadas para evitar infeções oportunistas.',
-          'Cobrir suavemente a ferida com gaze estéril humedecida.'
-        ];
-        causes = ['Lesão Térmica Directa'];
-      } else if (lowerText.includes('dor de cabeça') && !lowerText.includes('febre')) {
-        diseaseSuspected = 'Cefaleia de Tensão / Enxaqueca';
-        priorityLevel = 'Leve';
-        specialty = 'Clínica Geral / Neurologia';
-        recommendations = [
-          'Repousar em ambiente silencioso e pouco iluminado.',
-          'Manter hidratação regular e evitar cafeína em excesso.',
-          'Se a dor persistir mais de 48h, consulte um clínico geral.'
-        ];
-        causes = ['Enxaqueca Clássica', 'Cefaleia Tensional', 'Fadiga Ocular'];
-        goToHosp = false;
+CONVERSA:
+${conversationText}
+
+PERFIL DO PACIENTE:
+- Nome: ${profileName}
+- Idade: ${age} anos
+- Género: ${gender}
+- Município: ${municipality}
+- Peso: ${weight}kg
+- Altura: ${height}m
+- Alergias: ${allergies || 'Nenhuma'}
+- Doenças crónicas: ${diseases || 'Nenhuma'}
+- Medicação: ${medications || 'Nenhuma'}
+- Contacto emergência: ${emergencyContact}
+
+REGRAS DE RESPOSTA:
+1. Comece com: "Com base em toda a informação que você apresentou, está com [diagnóstico suspeito]."
+2. Para prioridade Leve/Moderado: "Deve [recomendações]."
+3. Para prioridade Urgente/Muito Urgente/Emergência: "Deve deslocar-se imediatamente para o hospital. Gostaria que eu envie o seu relatório para o hospital de modo que quando chegar já haja uma equipa preparada para receber?"
+4. Classifique prioridade: Emergência, Muito Urgente, Urgente, Moderado, Leve
+5. Liste causas prováveis (máx 3)
+6. Liste recomendações práticas (máx 4)
+7. Indique especialidade sugerida
+8. Responda APENAS em JSON válido com esta estrutura:
+{
+  "diagnosisText": "texto completo da resposta conversacional",
+  "priority": "Urgente",
+  "diseaseSuspected": "Malária por Plasmodium",
+  "causes": ["Malária", "Dengue", "Viral"],
+  "specialty": "Infectologia / Medicina Interna",
+  "recommendations": ["rec1", "rec2", "rec3"],
+  "goToHospital": true,
+  "isUrgent": true
+}`;
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: analysisPrompt }],
+          isGovMode: false,
+          currentPage: 'avaliacao-ia',
+          pageContext: `Análise de triagem para ${profileName}`,
+          language: 'pt'
+        }),
+      });
+
+      const data = await response.json();
+      
+      let analysis;
+      try {
+        // Try to parse JSON from AI response
+        const jsonMatch = data.message?.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          analysis = JSON.parse(jsonMatch[0]);
+        } else {
+          throw new Error('No JSON found');
+        }
+      } catch {
+        // Fallback to local analysis
+        analysis = generateLocalAnalysis(lastInput);
       }
 
       const newEval: DriaEvaluation = {
@@ -356,17 +357,17 @@ export function AvaliacaoIaContent({
         patientWeight: weight,
         patientHeight: height,
         patientMunicipality: municipality,
-        symptoms: lastInput || 'Febre, fadiga e mal-estar geral relatados.',
+        symptoms: lastInput || 'Sintomas relatados na conversa.',
         photos: uploadedPhotos,
         allergies: allergies || 'Nenhuma alergia relatada.',
         diseases: diseases || 'Sem histórico clínico relevante.',
         medications: medications || 'Sem medicação continuada.',
-        aiSummary: `Paciente com sintomas expressivos analisados pelo assistente virtual. Com base na idade (${age} anos) e sintomas descritos, o perfil epidemiológico de ${municipality} sugere rastreio focado em ${diseaseSuspected}.`,
-        possibleCauses: causes,
-        suggestedSpecialty: specialty,
-        priority: priorityLevel,
-        recommendations: recommendations,
-        goToHospital: goToHosp,
+        aiSummary: analysis.diagnosisText,
+        possibleCauses: analysis.causes,
+        suggestedSpecialty: analysis.specialty,
+        priority: analysis.priority,
+        recommendations: analysis.recommendations,
+        goToHospital: analysis.goToHospital,
         submittedHospitalId: null,
         submittedHospitalName: null,
         submissionTime: null,
@@ -379,7 +380,145 @@ export function AvaliacaoIaContent({
 
       setEvaluationResult(newEval);
       setPhase('result');
-    }, 2500);
+      
+      // Add AI diagnosis message to chat
+      const aiDiagnosisMsg = {
+        sender: 'ai' as const,
+        text: analysis.diagnosisText,
+        time: new Date().toLocaleTimeString('pt-AO', { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages(prev => [...prev, aiDiagnosisMsg]);
+
+    } catch (error) {
+      console.error('Analysis error:', error);
+      // Fallback to local analysis
+      const analysis = generateLocalAnalysis(lastInput);
+      const newEval: DriaEvaluation = {
+        id: 'ev_' + Date.now(),
+        patientName: profileName || 'Utente Registado',
+        patientBI: bi,
+        patientAge: age,
+        patientGender: gender,
+        patientWeight: weight,
+        patientHeight: height,
+        patientMunicipality: municipality,
+        symptoms: lastInput || 'Sintomas relatados na conversa.',
+        photos: uploadedPhotos,
+        allergies: allergies || 'Nenhuma alergia relatada.',
+        diseases: diseases || 'Sem histórico clínico relevante.',
+        medications: medications || 'Sem medicação continuada.',
+        aiSummary: analysis.diagnosisText,
+        possibleCauses: analysis.causes,
+        suggestedSpecialty: analysis.specialty,
+        priority: analysis.priority,
+        recommendations: analysis.recommendations,
+        goToHospital: analysis.goToHospital,
+        submittedHospitalId: null,
+        submittedHospitalName: null,
+        submissionTime: null,
+        doctorConfirmedDiagnosis: null,
+        doctorExams: [],
+        doctorObservations: null,
+        doctorStatus: 'Aguardando',
+        emergencyContact: emergencyContact
+      };
+      setEvaluationResult(newEval);
+      setPhase('result');
+    }
+  };
+
+  const generateLocalAnalysis = (lastInput: string) => {
+    const lowerText = lastInput.toLowerCase();
+    let diseaseSuspected = 'Malária por Plasmodium';
+    let priorityLevel: string = 'Urgente';
+    let specialty = 'Infectologia / Medicina Interna';
+    let recommendations = [
+      'Realizar gota espessa no hospital para confirmação laboratorial.',
+      'Tomar soro de reidratação oral em pequenas quantidades.',
+      'Controlar a febre com Paracetamol se tolerado.'
+    ];
+    let causes = ['Malária', 'Dengue Crónica', 'Infeção viral aguda'];
+    let goToHosp = true;
+    let isUrgent = true;
+
+    if (lowerText.includes('ébola') || lowerText.includes('ebola') || lowerText.includes('sangramento') || lowerText.includes('hemorragia') || lowerText.includes('sangrar')) {
+      diseaseSuspected = 'Suspeita de Doença por Vírus Ébola';
+      priorityLevel = 'Emergência';
+      specialty = 'Infectologia / Unidade de Isolamento de Biossegurança';
+      recommendations = [
+        'Isolamento imediato para evitar contacto físico com outras pessoas.',
+        'Evitar partilha de utensílios, talheres, roupas ou instalações sanitárias.',
+        'Deslocar-se urgentemente à unidade de saúde indicada.',
+        'A equipa hospitalar e resposta rápida (MINSA) foram notificadas.'
+      ];
+      causes = ['Doença por Vírus Ébola (Suspeito)', 'Febre de Lassa', 'Malária Grave Hemorrágica'];
+    } else if (lowerText.includes('diarreia') || lowerText.includes('vómito') || lowerText.includes('cólera')) {
+      diseaseSuspected = 'Suspeita Epidemiológica de Cólera';
+      priorityLevel = 'Urgente';
+      specialty = 'Infectologia / Gastroenterologia';
+      recommendations = [
+        'Iniciar imediatamente terapia de hidratação oral em grandes volumes.',
+        'Isolar utensílios de alimentação para prevenir infeção familiar.',
+        'Dirigir-se urgentemente para uma Unidade de Triagem de Cólera.'
+      ];
+      causes = ['Cólera', 'Gastroenterite Bacteriana Severa', 'Salmonelose'];
+    } else if (lowerText.includes('tosse') || lowerText.includes('peito') || lowerText.includes('respirar')) {
+      diseaseSuspected = 'Suspeita de Tuberculose ou Infeção Pulmonar';
+      priorityLevel = 'Moderado';
+      specialty = 'Pneumologia / Clínica Geral';
+      recommendations = [
+        'Agendar teste de expetoração (GeneXpert) no Centro de Saúde.',
+        'Usar máscara em ambientes familiares para prevenção.',
+        'Manter boa ventilação e entrada de luz solar nos quartos.'
+      ];
+      causes = ['Tuberculose Pulmonar', 'Bronquite Aguda', 'Pneumonia Bacteriana'];
+      isUrgent = false;
+    } else if (lowerText.includes('queimadura') || lowerText.includes('quente') || lowerText.includes('fogo')) {
+      diseaseSuspected = 'Queimadura Térmica Cutânea';
+      priorityLevel = 'Moderado';
+      specialty = 'Cirurgia Geral / Dermatologia';
+      recommendations = [
+        'Arrefecer a lesão com água corrente limpa por 15 minutos.',
+        'Não furar bolhas formadas para evitar infeções oportunistas.',
+        'Cobrir suavemente a ferida com gaze estéril humedecida.'
+      ];
+      causes = ['Lesão Térmica Directa'];
+      isUrgent = false;
+    } else if (lowerText.includes('dor de cabeça') && !lowerText.includes('febre')) {
+      diseaseSuspected = 'Cefaleia de Tensão / Enxaqueca';
+      priorityLevel = 'Leve';
+      specialty = 'Clínica Geral / Neurologia';
+      recommendations = [
+        'Repousar em ambiente silencioso e pouco iluminado.',
+        'Manter hidratação regular e evitar cafeína em excesso.',
+        'Se a dor persistir mais de 48h, consulte um clínico geral.'
+      ];
+      causes = ['Enxaqueca Clássica', 'Cefaleia Tensional', 'Fadiga Ocular'];
+      goToHosp = false;
+      isUrgent = false;
+    }
+
+    const urgentPriorities = ['Emergência', 'Muito Urgente', 'Urgente'];
+    const isUrgentCase = urgentPriorities.includes(priorityLevel);
+
+    let diagnosisText = `Com base em toda a informação que você apresentou, está com ${diseaseSuspected}. `;
+    
+    if (isUrgentCase) {
+      diagnosisText += `Deve deslocar-se imediatamente para o hospital. Gostaria que eu envie o seu relatório para o hospital de modo que quando chegar já haja uma equipa preparada para receber?`;
+    } else {
+      diagnosisText += `Deve ${recommendations[0].toLowerCase()}. ${recommendations[1]}. ${recommendations[2]}.`;
+    }
+
+    return {
+      diagnosisText,
+      priority: priorityLevel,
+      diseaseSuspected,
+      causes,
+      specialty,
+      recommendations,
+      goToHospital: goToHosp,
+      isUrgent: isUrgentCase
+    };
   };
 
   const handleSendToHospital = () => {

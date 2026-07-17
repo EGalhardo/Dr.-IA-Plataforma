@@ -88,7 +88,7 @@ function LanguageSelectorDropdown({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="btn-secondary !py-2 !px-3 gap-1.5"
+        className="btn-secondary !py-2 !px-3 gap-1.5 bg-transparent hover:bg-slate-100"
       >
         <Globe size={15} className="text-medic-600" strokeWidth={2} />
         <span className="text-xs font-bold uppercase tracking-wider">{activeOption.flagCode}</span>

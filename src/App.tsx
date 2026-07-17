@@ -4135,9 +4135,9 @@ Ficha clínica do titular:
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-[32px] border border-slate-200 shadow-2xl w-full max-w-sm overflow-hidden text-left mx-3"
+              className="rounded-[32px] border border-slate-200 shadow-2xl w-full max-w-sm overflow-hidden text-left mx-3"
             >
-              <div className="p-5 bg-slate-950 text-white flex justify-between items-center">
+              <div className="p-5 text-white flex justify-between items-center">
                 <div className="flex items-center gap-2.5">
                   <div className="p-2 bg-primary/20 text-primary rounded-xl">
                     <Database size={18} />
@@ -4146,6 +4146,12 @@ Ficha clínica do titular:
                     <h4 className="font-extrabold text-[12px] uppercase tracking-wider text-white font-sans">Gestor Híbrido de Conectividade</h4>
                     <span className="text-[9px] uppercase tracking-widest text-slate-400 block font-sans">Cache Local, Redundância SMS & USSD</span>
                   </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className={`flex items-center justify-center w-2.5 h-2.5 rounded-full transition-all duration-500 ${isOnline ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`} />
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${isOnline ? 'text-green-400' : 'text-red-400'}`}>
+                    {isOnline ? 'Online' : 'Offline'}
+                  </span>
                 </div>
                 <button
                   type="button"

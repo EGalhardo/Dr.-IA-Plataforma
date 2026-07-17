@@ -27,17 +27,17 @@ export const USER_PROFILE_PHOTO = MOCK_SESSION_USER.avatarUrl;
 export const HIGHLIGHT_SLIDES: Slide[] = [
   {
     id: 1,
-    title: "Primeiros Socorros Imediatos",
-    subtitle: "Muitos cidadãos fazem quilómetros até ao hospital para depois esperar em longas filas. O DR.IA resolve isso dando apoio de primeiros socorros imediato.",
+    title: "Triagem Clínica Inteligente",
+    subtitle: "Avalie os seus sintomas em minutos com a nossa IA baseada no Protocolo de Manchester. Receba prioridade clínica, recomendações e encaminhamento hospitalar automático.",
     image: "https://i.postimg.cc/RZpkSWsm/1.png",
     mobileImage: "https://i.postimg.cc/RZpkSWsm/1.png",
     btn: "Iniciar Triagem",
-    action: "home"
+    action: "avaliacao-ia"
   },
   {
     id: 2,
-    title: "Triagem Inteligente com IA",
-    subtitle: "Responda a perguntas simples sobre os seus sintomas e receba uma avaliação clínica precisa em segundos, com recomendações personalizadas.",
+    title: "Assistente de Triagem por IA",
+    subtitle: "Converse naturalmente com o Dr.IA sobre os seus sintomas. A IA faz perguntas clínicas relevantes e gera um relatório de triagem com prioridade Manchester.",
     image: "https://i.postimg.cc/GtRN7G2y/2.png",
     mobileImage: "https://i.postimg.cc/GtRN7G2y/2.png",
     btn: "Iniciar Avaliação",
@@ -45,38 +45,38 @@ export const HIGHLIGHT_SLIDES: Slide[] = [
   },
   {
     id: 3,
-    title: "Fale com o Dr. IA",
-    subtitle: "Fale sobre o seu estado de saúde com a Inteligência Artificial e receba as melhores orientações clínicas em segundos.",
+    title: "Encaminhamento Hospitalar Automático",
+    subtitle: "Em casos urgentes, o relatório clínico é enviado automaticamente para o hospital mais adequado. A equipa médica prepara o atendimento antes da sua chegada.",
     image: "https://i.postimg.cc/1592DG2Y/3.png",
     mobileImage: "https://i.postimg.cc/1592DG2Y/3.png",
-    btn: "Conversar com IA",
-    action: "home"
-  },
-  {
-    id: 4,
-    title: "Envio Direto em Casos Graves",
-    subtitle: "Caso seja detetada uma situação grave, o relatório clínico é enviado de imediato para o hospital de destino para que seja atendido sem esperas.",
-    image: "https://i.postimg.cc/y8GGqwdM/4.png",
-    mobileImage: "https://i.postimg.cc/y8GGqwdM/4.png",
     btn: "Ver Hospitais",
     action: "hospitais"
   },
   {
+    id: 4,
+    title: "Histórico Clínico Digital",
+    subtitle: "Todas as suas triagens, prescrições e relatórios ficam guardados no seu perfil. Aceda ao QR Code de saúde para partilhar com profissionais.",
+    image: "https://i.postimg.cc/y8GGqwdM/4.png",
+    mobileImage: "https://i.postimg.cc/y8GGqwdM/4.png",
+    btn: "Ver Histórico",
+    action: "historico-consultas"
+  },
+  {
     id: 5,
-    title: "Diminuição das Filas de Espera",
-    subtitle: "Com a triagem inteligente à distância, evitamos a sobrecarga das urgências e garantimos que os médicos focam-se nos casos críticos.",
+    title: "Rede Hospitalar Integrada",
+    subtitle: "Encontre hospitais e centros de saúde integrados ao Dr.IA. Veja tempos de espera, especialidades e contactos de emergência atualizados.",
     image: "https://i.postimg.cc/HnTZ4mZs/5.png",
     mobileImage: "https://i.postimg.cc/HnTZ4mZs/5.png",
-    btn: "Saber Mais",
-    action: "home"
+    btn: "Ver Hospitais",
+    action: "hospitais"
   },
   {
     id: 6,
-    title: "Combate Ativo de Pandemias",
-    subtitle: "O mapeamento de sintomas em tempo real permite ao Ministério da Saúde detetar e planear o combate a pandemias e surtos locais.",
+    title: "Vigilância Epidemiológica Nacional",
+    subtitle: "O Ministério da Saúde monitoriza surtos de Malária, Cólera, Ébola e outras doenças em tempo real através dos dados agregados do Dr.IA.",
     image: "https://i.postimg.cc/tCSSPLhq/6.png",
     mobileImage: "https://i.postimg.cc/tCSSPLhq/6.png",
-    btn: "Painel de Vigilância",
+    btn: "Painel MINSA",
     action: "home"
   }
 ];

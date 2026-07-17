@@ -96,8 +96,9 @@ export interface AppNotification {
   title: string;
   message: string;
   time: string;
-  type: 'success' | 'warning' | 'info';
+  type: 'success' | 'warning' | 'info' | 'critical';
   targetTab: string;
+  unread?: boolean;
 }
 
 export interface UserRequest {

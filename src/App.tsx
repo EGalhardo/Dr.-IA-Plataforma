@@ -4012,6 +4012,18 @@ Ficha clínica do titular:
             notifications={notifications}
             showNotifications={showNotifications}
             setShowNotifications={setShowNotifications}
+            onNotificationClick={(notification) => {
+              setActiveNotificationModal(notification);
+              if (notification.unread) {
+                setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, unread: false } : n));
+              }
+            }}
+            onMarkNotificationAsRead={(id) => {
+              setNotifications(prev => prev.map(n => n.id === id ? { ...n, unread: false } : n));
+            }}
+            onMarkAllNotificationsAsRead={() => {
+              setNotifications(prev => prev.map(n => ({ ...n, unread: false })));
+            }}
             isChatOpen={isChatOpen}
             setIsChatOpen={setIsChatOpen}
             appMode={appMode}

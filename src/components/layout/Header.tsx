@@ -27,8 +27,18 @@ interface HeaderProps {
   notifications: AppNotification[];
   showNotifications: boolean;
   setShowNotifications: (show: boolean) => void;
+  onNotificationClick: (notification: AppNotification) => void;
+  onMarkNotificationAsRead: (id: number) => void;
+  onMarkAllNotificationsAsRead: () => void;
   userProfilePhoto?: string;
-  NotificationDropdown: () => JSX.Element;
+  NotificationDropdown: (props: {
+    notifications: AppNotification[];
+    show: boolean;
+    onClose: () => void;
+    onNotificationClick: (notification: AppNotification) => void;
+    onMarkAsRead?: (id: number) => void;
+    onMarkAllAsRead?: () => void;
+  }) => JSX.Element;
   isChatOpen: boolean;
   setIsChatOpen: (open: boolean) => void;
   appMode: AppMode;
@@ -134,6 +144,7 @@ function LanguageSelectorDropdown({
 export function Header({
   setTab, iaLiveActive, startIaVoice, stopIaVoice,
   notifications, showNotifications, setShowNotifications,
+  onNotificationClick, onMarkNotificationAsRead, onMarkAllNotificationsAsRead,
   NotificationDropdown, isChatOpen, setIsChatOpen,
   appMode, emergencyMode = false, isOnline, onClickConnectivity, offlineQueueLength,
   tab, currentLanguage, setCurrentLanguage, theme, setTheme, onOpenMobileSidebar
@@ -193,7 +204,7 @@ export function Header({
   };
 
   const micDisabled = currentLanguage !== 'pt' || !hasPagePresentation(appMode, tab);
-  const unreadCount = notifications.length; // notifications shown in dropdown are active items
+  const unreadCount = notifications.filter(n => n.unread).length;
 
   return (
     <>
@@ -270,7 +281,14 @@ export function Header({
                 </span>
               )}
             </button>
-            <NotificationDropdown />
+            <NotificationDropdown
+              notifications={notifications}
+              show={showNotifications}
+              onClose={() => setShowNotifications(false)}
+              onNotificationClick={onNotificationClick}
+              onMarkAsRead={onMarkNotificationAsRead}
+              onMarkAllAsRead={onMarkAllNotificationsAsRead}
+            />
           </div>
         </div>
       </header>
@@ -375,7 +393,14 @@ export function Header({
                 </span>
               )}
             </button>
-            <NotificationDropdown />
+            <NotificationDropdown
+              notifications={notifications}
+              show={showNotifications}
+              onClose={() => setShowNotifications(false)}
+              onNotificationClick={onNotificationClick}
+              onMarkAsRead={onMarkNotificationAsRead}
+              onMarkAllAsRead={onMarkAllNotificationsAsRead}
+            />
           </div>
 
           {/* Avatar */}

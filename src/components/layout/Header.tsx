@@ -9,12 +9,13 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Mic, Globe, ChevronDown, Check, Sun, Moon, Search, Bell, Menu,
-  Activity, Wifi, WifiOff
+  Activity
 } from 'lucide-react';
 import { useSession } from '../../services/sessionStore';
 import { AppNotification, AppMode, LanguageCode, LANGUAGE_OPTIONS } from '../../types';
 import { useLanguage } from '../../hooks/useLanguage';
 import { LazyImage } from '../ui/LazyImage';
+import { ConnectivityIndicator } from '../ui/ConnectivityIndicator';
 import { hasPagePresentation } from '../../services/voicePresentations';
 import { useTranslationContext } from '../../context/TranslationContext';
 import type { JSX } from 'react';
@@ -328,22 +329,12 @@ export function Header({
         {/* Actions */}
         <div className="flex items-center gap-2">
           {/* Connectivity */}
-          <button
+          <ConnectivityIndicator
+            isOnline={isOnline}
+            label={translate(isOnline ? 'Online' : 'Offline')}
             onClick={onClickConnectivity}
-            className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
-              isOnline
-                ? 'bg-success-50 text-success-600 hover:bg-success-50/70'
-                : 'bg-warning-50 text-warning-600 animate-pulse'
-            }`}
-          >
-            {isOnline ? <Wifi size={14} /> : <WifiOff size={14} />}
-            <span className="uppercase tracking-wider">{translate(isOnline ? 'Online' : 'Offline')}</span>
-            {offlineQueueLength > 0 && (
-              <span className="bg-warning-600 text-white rounded-full min-w-[18px] h-[18px] text-[10px] font-bold flex items-center justify-center px-1">
-                {offlineQueueLength}
-              </span>
-            )}
-          </button>
+            badgeCount={offlineQueueLength}
+          />
 
           <LanguageSelectorDropdown currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} onLanguageChange={refreshTranslations} />
 

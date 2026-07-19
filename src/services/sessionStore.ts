@@ -63,7 +63,10 @@ export const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ child
   });
 
   const [appMode, setAppModeState] = useState<AppMode>(() => {
-    return (localStorage.getItem("gov_app_mode") as AppMode) || "user";
+    const stored = localStorage.getItem("gov_app_mode");
+    // Validate against known profiles: a stale/invalid value in localStorage
+    // would make PROFILES_MAP[appMode] undefined and crash the whole app on load.
+    return stored && stored in PROFILES_MAP ? (stored as AppMode) : "user";
   });
 
   const [isEmergencyActive, setIsEmergencyActive] = useState(() => {

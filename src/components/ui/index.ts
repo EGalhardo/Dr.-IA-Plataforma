@@ -5,7 +5,6 @@
 
 export { LazyImage } from './LazyImage';
 export { BackgroundImage } from './BackgroundImage';
-export { ConnectivityIndicator } from './ConnectivityIndicator';
 export { AnimatedCounter, CountingAnimation, formatCurrency, formatAngolaNumber, useAnimatedValue } from './AnimatedCounter';
 export { useImagePreload, preloadImage, preloadImages } from '../../hooks/useImagePreload';
 export { useIntersectionObserver, useLazyLoad } from '../../hooks/useIntersectionObserver';

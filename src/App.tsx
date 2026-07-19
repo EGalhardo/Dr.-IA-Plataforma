@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Loader2, User, IdCard, Lock, Fingerprint, UserPlus, Smartphone, Lightbulb, ChevronRight, Shield, ArrowLeft, CheckCircle, X, ShieldCheck, ShieldAlert, AlertTriangle, Check, Mail, Signal, Database, RefreshCw, Send, Download, Mic, Activity, Camera, Scan, Key } from 'lucide-react';
+import { Loader2, User, IdCard, Lock, Fingerprint, UserPlus, Smartphone, Lightbulb, ChevronRight, Shield, ArrowLeft, CheckCircle, X, ShieldCheck, ShieldAlert, AlertTriangle, Check, Mail, Signal, Database, RefreshCw, Send, Download, Mic, Activity, Wifi, WifiOff, Camera, Scan, Key } from 'lucide-react';
 
 // Components
 import {
@@ -42,7 +42,6 @@ import { MOCK_HOSPITALS, INITIAL_EVALUATIONS } from './constants/driaMocks';
 
 // UI Components
 import { LazyImage } from './components/ui/LazyImage';
-import { ConnectivityIndicator } from './components/ui/ConnectivityIndicator';
 const logoDria = 'https://i.postimg.cc/s1dqtGfG/1.png';
 
 // Constants & Types
@@ -4149,11 +4148,10 @@ Ficha clínica do titular:
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <ConnectivityIndicator
-                    isOnline={isOnline}
-                    label={isOnline ? 'Online' : 'Offline'}
-                    tone="dark"
-                  />
+                  <div className={`flex items-center justify-center w-2.5 h-2.5 rounded-full transition-all duration-500 ${isOnline ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`} />
+                  <span className={`text-[10px] font-bold uppercase tracking-widest ${isOnline ? 'text-green-400' : 'text-red-400'}`}>
+                    {isOnline ? 'Online' : 'Offline'}
+                  </span>
                 </div>
                 <button
                   type="button"

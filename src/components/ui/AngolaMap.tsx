@@ -137,6 +137,11 @@ const BASE_PROVINCES: BaseProv[] = [
     path: 'M290,645 L375,660 L405,710 L470,730 L580,715 L640,660 L625,615 L610,635 L525,610 L485,540 L485,490 L405,520 L390,565 L320,595 L245,590 L290,645 Z' },
 ];
 
+// Lista canonica das 21 provincias (derivada de BASE_PROVINCES).
+// Util para agregacoes externas (ex.: contagem de actividade por provincia)
+// sem hardcodar nomes noutros componentes.
+export const ANGOLA_PROVINCE_LIST: string[] = BASE_PROVINCES.map(p => p.name);
+
 // Verificacao: 21 provincias
 if (BASE_PROVINCES.length !== 21) {
   // eslint-disable-next-line no-console

@@ -8,7 +8,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Mic, Globe, ChevronDown, Check, Sun, Moon, Search, Bell, Menu,
+  Mic, Globe, ChevronDown, Check, Sun, Moon, Bell, Menu,
   Activity
 } from 'lucide-react';
 import { useSession } from '../../services/sessionStore';
@@ -214,7 +214,7 @@ export function Header({
         style={{ top: hasEmergencyBanner ? 32 : 0 }}
         className="app-mobile-header lg:hidden fixed left-0 right-0 h-16 bg-white/90 backdrop-blur-xl border-b border-ink-100 px-4 flex items-center justify-between z-40"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button onClick={onOpenMobileSidebar} className="btn-icon -ml-2" aria-label={translate("Abrir menu")}>
             <Menu size={20} />
           </button>
@@ -231,7 +231,7 @@ export function Header({
           </div>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <LanguageSelectorDropdown currentLanguage={currentLanguage} setCurrentLanguage={setCurrentLanguage} onLanguageChange={refreshTranslations} variant="compact" />
 
           <button
@@ -315,19 +315,8 @@ export function Header({
           </h1>
         </div>
 
-        {/* Search (visual placeholder for premium feel) */}
-        <div className="hidden xl:flex items-center gap-2 bg-ink-50 border border-ink-100 rounded-xl px-2.5 py-1.5 w-[240px] hover:border-ink-200 transition-colors">
-          <Search size={14} className="text-ink-400" />
-          <input
-            type="text"
-            placeholder={translate(isAdmin ? 'Pesquisar hospitais, indicadores...' : isInst ? 'Pesquisar pacientes, triagens...' : 'Pesquisar consultas, documentos...')}
-            className="bg-transparent outline-none text-xs text-ink-700 placeholder:text-ink-400 w-full"
-          />
-          <kbd className="hidden md:inline-flex text-[9px] font-semibold text-ink-400 bg-white border border-ink-200 rounded px-1.5 py-0.5">⌘K</kbd>
-        </div>
-
         {/* Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {/* Connectivity */}
           <MiniConnectivity
             isOnline={isOnline}
@@ -369,7 +358,7 @@ export function Header({
             <Mic size={18} strokeWidth={2} className="relative z-10" />
           </button>
 
-          <div className="w-px h-6 bg-ink-100 mx-1" />
+          <div className="w-px h-6 bg-ink-100" />
 
           <div className="relative">
             <button

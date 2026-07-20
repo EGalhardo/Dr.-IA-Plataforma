@@ -8,7 +8,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Mic, Globe, ChevronDown, Check, Sun, Moon, Bell, Menu,
+  Mic, Globe, ChevronDown, Check, Sun, Moon, Menu,
   Activity
 } from 'lucide-react';
 import { useSession } from '../../services/sessionStore';
@@ -205,7 +205,6 @@ export function Header({
   };
 
   const micDisabled = currentLanguage !== 'pt' || !hasPagePresentation(appMode, tab);
-  const unreadCount = notifications.filter(n => n.unread).length;
 
   return (
     <>
@@ -268,29 +267,6 @@ export function Header({
             )}
             <Mic size={17} className="relative z-10" strokeWidth={2} />
           </button>
-
-          <div className="relative">
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="btn-icon relative"
-              aria-label={translate("Notificações")}
-            >
-              <Bell size={18} />
-              {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 min-w-[16px] h-[16px] bg-danger-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center px-1 ring-2 ring-white">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-            <NotificationDropdown
-              notifications={notifications}
-              show={showNotifications}
-              onClose={() => setShowNotifications(false)}
-              onNotificationClick={onNotificationClick}
-              onMarkAsRead={onMarkNotificationAsRead}
-              onMarkAllAsRead={onMarkAllNotificationsAsRead}
-            />
-          </div>
         </div>
       </header>
 
@@ -359,29 +335,6 @@ export function Header({
           </button>
 
           <div className="w-px h-6 bg-ink-100" />
-
-          <div className="relative">
-            <button
-              onClick={() => setShowNotifications(!showNotifications)}
-              className="btn-icon relative"
-              aria-label={translate("Notificações")}
-            >
-              <Bell size={18} />
-              {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 min-w-[16px] h-[16px] bg-danger-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center px-1 ring-2 ring-white">
-                  {unreadCount}
-                </span>
-              )}
-            </button>
-            <NotificationDropdown
-              notifications={notifications}
-              show={showNotifications}
-              onClose={() => setShowNotifications(false)}
-              onNotificationClick={onNotificationClick}
-              onMarkAsRead={onMarkNotificationAsRead}
-              onMarkAllAsRead={onMarkAllNotificationsAsRead}
-            />
-          </div>
 
           {/* Avatar */}
           <button

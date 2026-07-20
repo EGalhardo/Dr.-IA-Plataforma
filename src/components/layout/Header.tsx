@@ -15,7 +15,7 @@ import { useSession } from '../../services/sessionStore';
 import { AppNotification, AppMode, LanguageCode, LANGUAGE_OPTIONS } from '../../types';
 import { useLanguage } from '../../hooks/useLanguage';
 import { LazyImage } from '../ui/LazyImage';
-import { ConnectivityPill } from '../ui/ConnectivityPill';
+import { MiniConnectivity } from '../ui/MiniConnectivity';
 import { hasPagePresentation } from '../../services/voicePresentations';
 import { useTranslationContext } from '../../context/TranslationContext';
 import type { JSX } from 'react';
@@ -329,7 +329,7 @@ export function Header({
         {/* Actions */}
         <div className="flex items-center gap-2">
           {/* Connectivity */}
-          <ConnectivityPill
+          <MiniConnectivity
             isOnline={isOnline}
             onClick={onClickConnectivity}
             label={translate(isOnline ? 'Online' : 'Offline')}

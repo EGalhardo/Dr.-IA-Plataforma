@@ -4,7 +4,7 @@
  * Painel MINSA — Executive Dashboard
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Activity, ShieldCheck, AlertCircle, Building2, MapPin, BarChart3, TrendingUp, TrendingDown,
@@ -16,8 +16,6 @@ import { GOV_HIGHLIGHT_SLIDES } from '../../constants/data';
 import { useLanguage } from '../../hooks/useLanguage';
 import { AnimatedCounter } from '../ui/AnimatedCounter';
 import { LazyImage } from '../ui/LazyImage';
-import { AngolaMap, ANGOLA_PROVINCE_LIST } from '../ui/AngolaMap';
-import type { ProvinceMarker, RiskLevel, Trend } from '../ui/AngolaMap';
 
 interface MinsaDashboardContentProps {
   evaluations: DriaEvaluation[];
@@ -80,86 +78,6 @@ export function MinsaDashboardContent({ evaluations, hospitals, setTab }: MinsaD
     }, 0)
   );
   const occPct = totalBeds > 0 ? Math.round((occupiedBeds / totalBeds) * 100) : 0;
-
-  // ── Actividade por provincia (mapa interactivo) ─────────────
-  // Regras 100% derivadas dos dados reais do painel:
-  //  • activeCases = n.º de triagens cujo patientMunicipality corresponde
-  //    ao nome da província (comparação normalizada, sem acentos);
-  //  • nível sobe conforme a prioridade das triagens activas
-  //    (Emergência/Muito Urgente → crítico, Urgente → alerta, ≥3 triagens → atenção);
-  //  • sobreposição dos surtos listados neste painel (OUTBREAKS) —
-  //    "Cazenga, Luanda", "Viana, Luanda", etc. elevam a província de Luanda;
-  //  • trend é 'estavel' (sem série temporal — não se inventa histórico).
-  const provinceMarkers: ProvinceMarker[] = useMemo(() => {
-    const norm = (s?: string | null) => (s || '').toLowerCase()
-      .replace(/[áàãâ]/g, 'a').replace(/[éê]/g, 'e').replace(/í/g, 'i')
-      .replace(/[óôõ]/g, 'o').replace(/ú/g, 'u').replace(/ç/g, 'c').trim();
-
-    // Níveis por gravidade declarada nos surtos do painel
-    const outbreakToLevel: Record<string, RiskLevel> = {
-      'crítico': 'critico', 'elevado': 'alerta', 'moderado': 'atencao', 'baixo': 'normal',
-    };
-    const LEVEL_ORDER: RiskLevel[] = ['normal', 'atencao', 'alerta', 'critico'];
-    const maxLevel = (a: RiskLevel, b: RiskLevel): RiskLevel =>
-      LEVEL_ORDER[Math.max(LEVEL_ORDER.indexOf(a), LEVEL_ORDER.indexOf(b))];
-
-    // Agregar surtos do painel por província (locations tipo "Cazenga, Luanda")
-    const outbreakByProvince: Record<string, { level: RiskLevel; diseases: string[] }> = {};
-    OUTBREAKS.forEach(o => {
-      const level = outbreakToLevel[norm(o.level)];
-      if (!level) return; // ex.: 'Monitorização' não eleva nível
-      const prov = ANGOLA_PROVINCE_LIST.find(p => norm(o.location).includes(norm(p)));
-      if (!prov) return; // ex.: 'Fronteira Norte' não é província
-      const cur = outbreakByProvince[norm(prov)] || { level: 'normal' as RiskLevel, diseases: [] };
-      cur.level = maxLevel(cur.level, level);
-      if (!cur.diseases.includes(o.disease)) cur.diseases.push(o.disease);
-      outbreakByProvince[norm(prov)] = cur;
-    });
-
-    const riskLabelOf: Record<RiskLevel, string> = {
-      normal: 'Baixo', atencao: 'Moderado', alerta: 'Elevado', critico: 'Crítico',
-    };
-
-    return ANGOLA_PROVINCE_LIST.map(prov => {
-      const provNorm = norm(prov);
-      const matched = evaluations.filter(ev => {
-        const mun = norm(ev.patientMunicipality);
-        return mun && (mun === provNorm || mun.includes(provNorm) || provNorm.includes(mun));
-      });
-      const activeSevere = matched.filter(ev =>
-        ['Emergência', 'Muito Urgente', 'Urgente'].includes(ev.priority) && ev.doctorStatus !== 'Alta'
-      );
-      const outbreak = outbreakByProvince[provNorm];
-      const activeCases = matched.length;
-
-      // Sem triagens e sem surtos: a província fica no estado padrão do mapa.
-      if (activeCases === 0 && !outbreak) return null;
-
-      const hasEmergency = activeSevere.some(ev => ['Emergência', 'Muito Urgente'].includes(ev.priority));
-      const hasUrgent = activeSevere.length > 0;
-      const triageLevel: RiskLevel = hasEmergency ? 'critico' : hasUrgent ? 'alerta' : activeCases >= 3 ? 'atencao' : 'normal';
-      const level = outbreak ? maxLevel(triageLevel, outbreak.level) : triageLevel;
-
-      const latest = matched.map(ev => ev.submissionTime).filter(Boolean).sort().reverse()[0] || new Date().toISOString();
-      const statusParts = [
-        activeCases > 0 ? `${activeCases} triagem(ns) registada(s)` : 'Sem triagens registadas',
-        activeSevere.length > 0 ? `${activeSevere.length} caso(s) urgente(s)` : null,
-        outbreak ? `Surtos activos: ${outbreak.diseases.join(', ')}` : null,
-      ].filter(Boolean) as string[];
-
-      return {
-        name: prov,
-        // Os campos geo (cx/cy/path/capital) são substituídos pelo merge interno do AngolaMap.
-        cx: 0, cy: 0, path: '', capital: '',
-        level,
-        activeCases,
-        trend: 'estavel' as Trend,
-        status: statusParts.join(' · '),
-        lastUpdate: latest,
-        riskLabel: riskLabelOf[level],
-      } as ProvinceMarker;
-    }).filter((m): m is ProvinceMarker => m !== null);
-  }, [evaluations]);
 
   const kpis = [
     { label: 'Triagens Totais', value: totalEvaluations, suffix: '', delta: `${awaitingEvaluations} em espera`, up: true, icon: Activity, color: 'medic' },
@@ -358,9 +276,13 @@ export function MinsaDashboardContent({ evaluations, hospitals, setTab }: MinsaD
             </div>
           </div>
 
-          {/* Mapa interactivo de Angola — zoom, pan, hover e marcadores clicáveis */}
-          <div className="relative rounded-xl border border-ink-100 overflow-hidden">
-            <AngolaMap markers={provinceMarkers} />
+          <div className="relative aspect-[4/3] max-h-[520px] bg-white rounded-xl border border-ink-100 overflow-hidden flex items-center justify-center p-3">
+            <img
+              src="https://i.postimg.cc/ht4Z2ywt/2.png"
+              alt="Mapa Nacional · Actividade por Província"
+              referrerPolicy="no-referrer"
+              className="max-h-full max-w-full object-contain rounded-lg shadow-sm border border-slate-50"
+            />
           </div>
         </div>
 
